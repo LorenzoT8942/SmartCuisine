@@ -32,7 +32,7 @@ services:
     build:
         context: ./authenticationManagement
     ports:
-      - 3000:3000
+      - "3000:3000"
     networks:
       - app-network
     depends_on:
@@ -46,7 +46,7 @@ services:
     build:
           context: ./userProfileManagement
     ports:
-      - 3001:3000
+      - "3001:3000"
     networks:
       - rabbit-network
       - app-network
@@ -62,7 +62,7 @@ services:
     build:
           context: ./shoppingListManagement
     ports:
-      - 3002:3000
+      - "3002:3000"
     networks:
       - app-network
     depends_on:
@@ -76,7 +76,7 @@ services:
     build:
           context: ./ingredientsStorageManagement
     ports:
-      - 3003:3000
+      - "3003:3000"
     networks:
       - app-network
     depends_on:
@@ -90,7 +90,7 @@ services:
     build:
           context: ./recipiesAndIngredientsManagement
     ports:
-      - 3004:3000
+      - "3004:3000"
     networks:
       - app-network
     depends_on:
@@ -103,7 +103,7 @@ services:
     build:
           context: ./notificationManagement
     ports:
-      - 3005:3000
+      - "3005:3000"
     networks:
       - rabbit-network
       - app-network
