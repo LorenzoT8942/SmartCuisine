@@ -1,0 +1,124 @@
+version: '3'
+
+services:
+  postgresql:
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_USER: smart_cuisine
+      POSTGRES_PASSWORD: forzaMagggicaRoma1
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+      - ./postgresql/postgresql.conf:/etc/postgresql/postgresql.conf
+    ports:
+      - "5432:5432"
+    command: -c 'config_file=/etc/postgresql/postgresql.conf'
+    networks:
+      - app-network
+
+
+  rabbitmq:
+    image: rabbitmq:4.0
+    ports:
+      - "5672:5672"
+      - "15672:15672" 
+
+    networks:
+      - rabbit-network
+
+
+  authentication-management:
+    image: Authentication-management
+    build:
+        context: ./authenticationManagement
+    ports:
+      - 3000:3000
+    networks:
+      - app-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
+
+
+  userProfile-management:
+    image: UserProfile-management
+    build:
+          context: ./userProfileManagement
+    ports:
+      - 3001:3000
+    networks:
+      - rabbit-network
+      - app-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+
+
+  shoppingList-management:
+    image: ShoppingList-management
+    build:
+          context: ./shoppingListManagement
+    ports:
+      - 3002:3000
+    networks:
+      - app-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
+
+
+  ingredientsStorage-management:
+    image: IngredientsStorage-management
+    build:
+          context: ./ingredientsStorageManagement
+    ports:
+      - 3003:3000
+    networks:
+      - app-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
+
+
+  recipiesAndIngredients-management:
+    image: RecipiesAndIngredients-management
+    build:
+          context: ./recipiesAndIngredientsManagement
+    ports:
+      - 3004:3000
+    networks:
+      - app-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
+
+  notification-management:
+    image: Notification-management
+    build:
+          context: ./notificationManagement
+    ports:
+      - 3005:3000
+    networks:
+      - rabbit-network
+      - app-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+
+
+networks:
+  rabbit-network:
+    driver: bridge
+
+  app-network:
+    driver: bridge
+
+
