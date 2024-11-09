@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "authentication.service.apikey",
+    "type": "java.lang.String",
+    "description": "A description for 'authentication.service.apikey'"
+  },
+  {
+    "name": "authentication.service.jwtSecret",
+    "type": "java.lang.String",
+    "description": "A description for 'authentication.service.jwtSecret'"
+  },
+  {
+    "name": "authentication.service.jwtExpirationTime",
+    "type": "java.lang.String",
+    "description": "A description for 'authentication.service.jwtExpirationTime'"
+  }
+]}

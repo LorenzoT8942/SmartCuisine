@@ -21,14 +21,12 @@ public class AuthenticationController {
 
     @PostMapping("/token")
     public ResponseEntity<JWTResponse> createToken(@RequestBody JWTRequest request) {
-        // Autenticazione del servizio chiamante
-        //return ResponseEntity.status(403).body(null); // Forbidden
+        // Authenticated with the API key
         
         String token = authServ.generateToken(request.getUsername());
         return ResponseEntity.ok(new JWTResponse(token));
     }
 
-    // Endpoint per validare un token
     @GetMapping("/validate")
     public ResponseEntity<String> validateToken(@RequestHeader("Authorization") String token) {
         token = token.replace("Bearer ", "");
