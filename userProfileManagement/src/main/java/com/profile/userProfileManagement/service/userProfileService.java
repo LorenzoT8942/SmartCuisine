@@ -80,7 +80,7 @@ public class userProfileService {
 
 
     public userProfileResponseDto getprofile(String username){
-        Optional<userProfile> up = userPRepo.findOneByUsername(username);
+        Optional<userProfile> up = userPRepo.findOneByusername(username);
         if (up.isEmpty()) return null;
         userProfile user = up.get();
 

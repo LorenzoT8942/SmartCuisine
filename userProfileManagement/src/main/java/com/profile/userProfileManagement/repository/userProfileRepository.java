@@ -9,10 +9,11 @@ import com.profile.userProfileManagement.model.userProfile;
 
 
 @Repository
-public interface userProfileRepository extends JpaRepository<userProfile, Long> {
+public interface userProfileRepository extends JpaRepository<userProfile, String> {
 
     Optional<userProfile> findOneByusernameAndhashPassword(String username, String hash_pass);
 
-    Optional<userProfile> findOneByUsername(String username);
+    Optional<userProfile> findOneByusername(String username);
+
 
 }
