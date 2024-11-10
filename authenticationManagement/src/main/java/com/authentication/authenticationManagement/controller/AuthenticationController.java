@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.authentication.authenticationManagement.dtos.requests.JWTRequest;
 import com.authentication.authenticationManagement.dtos.responses.JWTResponse;
+import com.authentication.authenticationManagement.dtos.responses.JWTValidateResponse;
 import com.authentication.authenticationManagement.service.AuthenticationService;
 
 @RestController
@@ -28,13 +29,18 @@ public class AuthenticationController {
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<String> validateToken(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<JWTValidateResponse> validateToken(@RequestHeader("Authorization") String token) {
         token = token.replace("Bearer ", "");
+        JWTValidateResponse resp = new JWTValidateResponse();
         if (authServ.validateToken(token)) {
             String username = authServ.getUsernameFromToken(token);
-            return ResponseEntity.ok("Token valido per l'utente: " + username);
+            resp.setValid(true);
+            resp.setMessage(username);
+            return ResponseEntity.ok(resp);
         } else {
-            return ResponseEntity.status(401).body("Token non valido o scaduto");
+            resp.setValid(false);
+            resp.setMessage("Token non valido o scaduto");
+            return ResponseEntity.status(401).body(resp);
         }
     }
 

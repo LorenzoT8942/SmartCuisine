@@ -30,11 +30,16 @@ public class APIKeyAuthenticationFilter implements Filter{
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+
         // Retrieve API key from header
         String requestApiKey = httpRequest.getHeader("Authorization");
 
         // Check if the API key is valid
-        if (validApiKey.equals(requestApiKey)) {
+        
+        if (requestApiKey == null || requestApiKey.isEmpty()) {
+            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not setted any API Key");
+        }
+        else if (validApiKey.equals(requestApiKey)) {
             chain.doFilter(request, response); // Continue to the next filter or target
         } else {
             // Invalid API key

@@ -1,5 +1,22 @@
-{"properties": [{
-  "name": "authentication.service.apikey",
-  "type": "java.lang.String",
-  "description": "A description for 'authentication.service.apikey'"
-}]}
+{"properties": [
+  {
+    "name": "authentication.service.apikey",
+    "type": "java.lang.String",
+    "description": "A description for 'authentication.service.apikey'"
+  },
+  {
+    "name": "external.api.auth_service.token",
+    "type": "java.lang.String",
+    "description": "A description for 'external.api.auth_service'"
+  },
+  {
+    "name": "external.api.auth_service.validate",
+    "type": "java.lang.String",
+    "description": "A description for 'external.api.auth_service.validate'"
+  },
+  {
+    "name": "external.api.rabbitmq_service.consumer",
+    "type": "java.lang.String",
+    "description": "A description for 'external.api.rabbitmq_service.consumer'"
+  }
+]}

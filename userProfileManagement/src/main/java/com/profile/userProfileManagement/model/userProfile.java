@@ -1,7 +1,7 @@
 package com.profile.userProfileManagement.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.profile.userProfileManagement.model.enums.genderEnum;
 
@@ -28,13 +28,16 @@ import lombok.NoArgsConstructor;
 @Table(name = "userProfiles")
 public class userProfile {
 
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Email
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Id
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
 
     @Column(name = "gender")
     private genderEnum gender;
@@ -45,10 +48,10 @@ public class userProfile {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name="notifications",
-            joinColumns = @JoinColumn(name="userProfile_id", referencedColumnName="id"),
+            joinColumns = @JoinColumn(name="userProfile_username", referencedColumnName="id"),
             inverseJoinColumns=@JoinColumn(name="notification_id", referencedColumnName="notificationId")
     )
-    private Set<Notification> notifications = new HashSet<>();
+    private List<Notification> notifications = new ArrayList<>();
 
 
 }
