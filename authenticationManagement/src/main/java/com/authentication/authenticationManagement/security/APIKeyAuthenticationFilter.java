@@ -30,6 +30,11 @@ public class APIKeyAuthenticationFilter implements Filter{
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+        if ("/auth/validate".equals(httpRequest.getRequestURI())) {
+            chain.doFilter(request, response); 
+            return;
+        }
+
 
         // Retrieve API key from header
         String requestApiKey = httpRequest.getHeader("Authorization");

@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.profile.userProfileManagement.dtos.requests.loginDto;
 import com.profile.userProfileManagement.dtos.requests.userProfileRequestDto;
@@ -45,6 +46,10 @@ public class userProfileService {
         return passwordEncoder.encode(plainPassword);
     }
 
+    private boolean verifyPassword(String plainPassword, String hashedPassword) {
+        return passwordEncoder.matches(plainPassword, hashedPassword);
+    }
+
 
 
     public userProfile createUserProfile(userProfileRequestDto dto) throws Exception{
@@ -53,12 +58,27 @@ public class userProfileService {
         u.setGender(dto.getGender());
         u.setUsername(dto.getUsername());
         u.setHashPassword(hashPassword(dto.getPassword()));
+
+        if (userPRepo.findOneByusername(dto.getUsername()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Profile already created for user " + dto.getUsername());
+        }
+
+        //check if email already exists
+        if (userPRepo.findOneByEmail(dto.getEmail()).isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists " + dto.getEmail());
+        }
         return userPRepo.save(u);
     }
 
     public ResponseEntity<Object> login(loginDto dto){
-        Optional<userProfile> up = userPRepo.findOneByusernameAndhashPassword(dto.getUsername(), hashPassword(dto.getPassword()));
-        if (up.isEmpty()) return new ResponseEntity<>("username or password are wrong", HttpStatus.NOT_FOUND);
+
+        Optional<userProfile> up = userPRepo.findOneByusername(dto.getUsername());
+
+        //Optional<userProfile> up = userPRepo.findByUsernameAndHashPassword(dto.getUsername(), hashPassword(dto.getPassword()));
+        if (up.isEmpty()) return new ResponseEntity<>("username not present", HttpStatus.NOT_FOUND);
+        if(!verifyPassword(dto.getPassword(), up.get().getHashPassword())) return new ResponseEntity<>("the password is wrong", HttpStatus.FORBIDDEN);
+
+
         String username = up.get().getUsername();
 
         HttpHeaders headers = new HttpHeaders();

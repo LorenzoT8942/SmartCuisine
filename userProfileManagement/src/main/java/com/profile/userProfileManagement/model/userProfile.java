@@ -9,8 +9,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -28,9 +26,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "userProfiles")
 public class userProfile {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Email
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -47,8 +42,8 @@ public class userProfile {
 
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name="notifications",
-            joinColumns = @JoinColumn(name="userProfile_username", referencedColumnName="id"),
+    @JoinTable(name="user_profiles_notifications",
+            joinColumns = @JoinColumn(name="userProfile_username", referencedColumnName="username"),
             inverseJoinColumns=@JoinColumn(name="notification_id", referencedColumnName="notificationId")
     )
     private List<Notification> notifications = new ArrayList<>();

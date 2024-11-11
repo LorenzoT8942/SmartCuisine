@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class userProfileRequestDto {
     private String email;
     private genderEnum gender;
-    private String Password;
+    private String password;
     private String username;
 
 }

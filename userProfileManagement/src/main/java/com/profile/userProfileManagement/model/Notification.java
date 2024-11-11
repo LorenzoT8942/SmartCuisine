@@ -3,7 +3,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,12 +18,13 @@ import lombok.NoArgsConstructor;
 public class Notification {
 
     @Id
+    @Column(name = "notificationId")
     private Long notificationId;
 
     @Column(name = "content")
     private String content;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "userProfile", nullable = false)
     private userProfile userProfile;
 

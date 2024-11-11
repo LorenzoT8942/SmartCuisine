@@ -8,12 +8,14 @@ import org.springframework.stereotype.Repository;
 import com.profile.userProfileManagement.model.userProfile;
 
 
+
 @Repository
 public interface userProfileRepository extends JpaRepository<userProfile, String> {
 
-    Optional<userProfile> findOneByusernameAndhashPassword(String username, String hash_pass);
+    Optional<userProfile> findByUsernameAndHashPassword(String username, String hash_pass);
 
     Optional<userProfile> findOneByusername(String username);
+    Optional<userProfile> findOneByEmail(String email);
 
 
 }

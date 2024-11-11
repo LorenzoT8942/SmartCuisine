@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.profile.userProfileManagement.dtos.requests.loginDto;
@@ -29,6 +28,7 @@ public class userProfileController {
 
     @PostMapping("/create")
     public ResponseEntity<Object> createProfile(@RequestBody userProfileRequestDto userProfileRequestDto) {
+        System.out.println(userProfileRequestDto);
         try {
             userProfile createdProfile = userPServ.createUserProfile(userProfileRequestDto);
             return new ResponseEntity<>(createdProfile, HttpStatus.CREATED);
@@ -44,7 +44,7 @@ public class userProfileController {
 
 
     @GetMapping("/profile")
-    public ResponseEntity<Object> getProfileData(@RequestParam String param) {
+    public ResponseEntity<Object> getProfileData() {
         String username = JWTContext.get();
         userProfileResponseDto result = userPServ.getprofile(username);
         if (result == null){

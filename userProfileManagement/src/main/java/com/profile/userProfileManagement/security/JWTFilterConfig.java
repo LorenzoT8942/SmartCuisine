@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JWTFilterConfig {
     @Bean
-    public FilterRegistrationBean<JWTAuthenticationFilter> apiKeyFilterRegistration(JWTAuthenticationFilter apiKeyFilter) {
+    public FilterRegistrationBean<JWTAuthenticationFilter> jwtFilterRegistration(JWTAuthenticationFilter jwtFilter) {
         FilterRegistrationBean<JWTAuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(apiKeyFilter);
+        registrationBean.setFilter(jwtFilter);
         registrationBean.addUrlPatterns("/*");
         return registrationBean;
     }

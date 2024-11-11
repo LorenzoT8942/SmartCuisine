@@ -45,9 +45,11 @@ public class JWTAuthenticationFilter implements Filter{
 
          // Skip the filter for these paths
         if ("/profiles/create".equals(httpRequest.getRequestURI()) || "/profiles/login".equals(httpRequest.getRequestURI())) {
+
             chain.doFilter(request, response); 
             return;
         }
+
 
         // Retrieve JWT token from header
         String token = httpRequest.getHeader("Authorization");
@@ -55,6 +57,7 @@ public class JWTAuthenticationFilter implements Filter{
             httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not setted any JWT token");
             return;
         }
+        System.out.println("the token of the user to be validated is "+token);
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
