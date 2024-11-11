@@ -31,9 +31,10 @@ services:
 
   authentication-management:
     container_name: authentication-management
-    image: Authentication-management
+    image: authentication-management
     build:
         context: ./authenticationManagement
+        dockerfile: authentication.Dockerfile
     ports:
       - "3000:3000"
     networks:
@@ -46,9 +47,10 @@ services:
 
   userProfile-management:
     container_name: userProfile-management
-    image: UserProfile-management
+    image: userProfile-management
     build:
           context: ./userProfileManagement
+          dockerfile: userProfile.Dockerfile
     ports:
       - "3001:3000"
     networks:
@@ -59,7 +61,6 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_started
-
 
   shoppingList-management:
     container_name: shoppingList-management

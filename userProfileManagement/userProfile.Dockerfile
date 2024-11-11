@@ -1,5 +1,6 @@
 # Start with an official Maven image with Java 21 to build the application
-FROM maven:3.8.5-eclipse-temurin-21 AS build
+FROM eclipse-temurin:21-jdk as build
+RUN apt-get update && apt-get install -y maven
 
 # Set the working directory in the container
 WORKDIR /app
