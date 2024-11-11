@@ -1,17 +1,15 @@
 # Start with an official Maven image with Java 21 to build the application
-FROM eclipse-temurin:21-jdk as build
-RUN apt-get update && apt-get install -y maven
+FROM maven:3.9.8-eclipse-temurin-21 as build
 
 # Set the working directory in the container
 WORKDIR /app
 
 # Copy the pom.xml and download dependencies
 COPY pom.xml .
-RUN mvn dependency:go-offline
 
 # Copy the rest of the application source code and build the application
 COPY src ./src
-RUN mvn package -DskipTests
+RUN mvn clean install -DskipTests
 
 # Start a new image for the runtime with only the JRE
 FROM eclipse-temurin:21-jre

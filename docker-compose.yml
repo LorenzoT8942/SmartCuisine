@@ -9,8 +9,10 @@ services:
       POSTGRES_USER: smart_cuisine
       POSTGRES_PASSWORD: forzaMagggicaRoma1
     volumes:
-      - ./postgresql:/var/lib/postgresql/data
+      - ./postgresql/data:/var/lib/postgresql/data
       - ./postgresql/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./postgresql/init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
+
     ports:
       - "5432:5432"
     command: -c 'config_file=/etc/postgresql/postgresql.conf'
@@ -34,23 +36,21 @@ services:
     image: authentication-management
     build:
         context: ./authenticationManagement
-        dockerfile: authentication.Dockerfile
     ports:
       - "3000:3000"
     networks:
       - app-network
     depends_on:
       postgresql:
-        condition: service_healthy
+        condition: service_started
 
 
 
-  userProfile-management:
-    container_name: userProfile-management
-    image: userProfile-management
+  userprofile-management:
+    container_name: userprofile-management
+    image: userprofile-management
     build:
           context: ./userProfileManagement
-          dockerfile: userProfile.Dockerfile
     ports:
       - "3001:3000"
     networks:
@@ -58,26 +58,11 @@ services:
       - app-network
     depends_on:
       postgresql:
-        condition: service_healthy
+        condition: service_started
       rabbitmq:
         condition: service_started
 
-  shoppingList-management:
-    container_name: shoppingList-management
-    image: ShoppingList-management
-    build:
-          context: ./shoppingListManagement
-    ports:
-      - "3002:3000"
-    networks:
-      - app-network
-    depends_on:
-      postgresql:
-        condition: service_healthy
-
-
-
-  ingredientsStorage-management:
+ ingredientsStorage-management:
     container_name: ingredientsStorage-management
     image: IngredientsStorage-management
     build:
@@ -122,7 +107,7 @@ services:
       rabbitmq:
         condition: service_started
 
-
+  
 networks:
   rabbit-network:
     driver: bridge
