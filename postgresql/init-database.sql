@@ -1,4 +1,3 @@
-CREATE DATABASE authentication_db;
 CREATE DATABASE userProfile_db;
 CREATE DATABASE shoppingList_db;
 CREATE DATABASE ingredientsStorage_db;
