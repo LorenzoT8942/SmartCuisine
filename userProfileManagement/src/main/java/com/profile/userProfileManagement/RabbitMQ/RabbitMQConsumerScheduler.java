@@ -13,10 +13,6 @@ public class RabbitMQConsumerScheduler {
     private RabbitMQConsumerService rabbitService;
 
 
-    @Scheduled(cron = "0 0 * * * *")  // Every hour, on the hour
-    public void scheduledTask() {
-        System.out.println("Scheduled task triggered, fetching and processing notifications.");
-        rabbitService.processNotifications();
-    }
+   
 
 }

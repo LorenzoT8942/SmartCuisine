@@ -29,13 +29,18 @@ services:
 
   rabbitmq:
     container_name: rabbitmq
-    image: rabbitmq:4.0
+    image: rabbitmq:3-management
     ports:
       - "5672:5672"
       - "15672:15672" 
-
+    volumes:
+      - ./rabbitmq/rabbitmq_data:/var/lib/rabbitmq
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json
     networks:
       - rabbit-network
+
+    
 
 
   authentication-management:
@@ -69,6 +74,9 @@ services:
       rabbitmq:
         condition: service_started
 
+volumes:
+  rabbitmq_data:
+    driver: local
   
 networks:
   rabbit-network:

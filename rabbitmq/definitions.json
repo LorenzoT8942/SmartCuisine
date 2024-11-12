@@ -1,0 +1,36 @@
+{
+    "vhosts": [
+      {
+        "name": "/"
+      }
+    ],
+    "queues": [
+      {
+        "name": "notifications",
+        "vhost": "/",
+        "durable": true
+      }
+    ],
+    "users": [
+        {
+          "name": "myuser",
+          "password_hash": "8caBUv0wKX9L6UWr+TgudGXgNjBUAB7XbNcsFva3VaD1E1Yg",
+          "tags": "administrator"
+        },
+        {
+          "name": "guest",
+          "password_hash": "kLRrOjqsUUMheEWl6Wt60HGwaGGHdCjK5LJWm/aUVvq74lwI",
+          "tags": "administrator"
+        }
+      ],
+    "permissions": [
+        {
+          "user": "guest",
+          "vhost": "/",
+          "configure": ".*",
+          "write": ".*",
+          "read": ".*"
+        }
+    ]
+
+  }

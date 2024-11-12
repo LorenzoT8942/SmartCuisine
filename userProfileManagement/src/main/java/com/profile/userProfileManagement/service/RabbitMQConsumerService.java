@@ -1,14 +1,11 @@
 package com.profile.userProfileManagement.service;
 
-import java.util.List;
-import com.profile.userProfileManagement.model.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import com.profile.userProfileManagement.dtos.requests.rabbitMQNotificationDto;
 
 @Service
 public class RabbitMQConsumerService {
@@ -24,7 +21,7 @@ public class RabbitMQConsumerService {
 
 
 
-    public List<Notification> fetchMessages() {
+    /*public List<Notification> fetchMessages() {
         ResponseEntity<List<Notification>> response = restTemplate.exchange(
                 queueUrl, HttpMethod.GET, null,
                 new ParameterizedTypeReference<List<Notification>>() {});
@@ -40,6 +37,11 @@ public class RabbitMQConsumerService {
                 notServ.addNotification(notification);
             });
         }
+    }*/
+
+
+    public void processNotification(rabbitMQNotificationDto notification){
+        notServ.addNotification(notification);
     }
 
 }
