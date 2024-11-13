@@ -36,8 +36,7 @@ public class NotificationService {
         n.setNotificationId(not.getNotificationId());
         n.setUserProfile(user.get());
 
-        notRepo.save(n);
-        notRepo.flush();
+        notRepo.saveAndLinkNotification(n);
     }
 
 }
