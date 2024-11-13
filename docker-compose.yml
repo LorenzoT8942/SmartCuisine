@@ -74,6 +74,19 @@ services:
       rabbitmq:
         condition: service_started
 
+  shoppinglist-management:
+    container_name: shoppinglist-management
+    image: shoppinglist-management
+    build:
+      context: ./shoppingListManagement
+    ports:
+      - "3002:3000"
+    networks:
+      - app-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
 volumes:
   rabbitmq_data:
     driver: local
