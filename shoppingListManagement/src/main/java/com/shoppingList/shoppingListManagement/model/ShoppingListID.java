@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 @Embeddable
-public class ShoppingListId implements Serializable {
+public class ShoppingListID implements Serializable {
 
     @Column(name = "username", nullable = false)
     private String username;
