@@ -12,8 +12,6 @@ services:
       - ./postgresql/data:/var/lib/postgresql/data
       - ./postgresql/postgresql.conf:/etc/postgresql/postgresql.conf
       - ./postgresql/init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
-    
-
     ports:
       - "5432:5432"
     command: -c 'config_file=/etc/postgresql/postgresql.conf'
@@ -21,10 +19,10 @@ services:
       - app-network
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "smart_cuisine", "-d", "notification_db", "-h", "localhost"]
-      interval: 30s  # Check every 30 seconds
-      retries: 3  # Retry 3 times before considering the container unhealthy
-      start_period: 10s  # Wait 10 seconds after starting before performing the first check
-      timeout: 5s  # Timeout after 5 seconds
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 5s
 
 
   rabbitmq:
@@ -52,9 +50,6 @@ services:
       - "3000:3000"
     networks:
       - app-network
-    depends_on:
-      postgresql:
-        condition: service_started
 
 
 

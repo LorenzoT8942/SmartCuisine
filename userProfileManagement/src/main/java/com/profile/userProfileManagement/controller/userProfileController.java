@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.profile.userProfileManagement.dtos.requests.loginDto;
 import com.profile.userProfileManagement.dtos.requests.userProfileRequestDto;
 import com.profile.userProfileManagement.dtos.responses.userProfileResponseDto;
-import com.profile.userProfileManagement.model.userProfile;
 import com.profile.userProfileManagement.service.userProfileService;
 import com.profile.userProfileManagement.utilities.JWTContext;
 
@@ -28,9 +27,8 @@ public class userProfileController {
 
     @PostMapping("/create")
     public ResponseEntity<Object> createProfile(@RequestBody userProfileRequestDto userProfileRequestDto) {
-        System.out.println(userProfileRequestDto);
         try {
-            userProfile createdProfile = userPServ.createUserProfile(userProfileRequestDto);
+            userProfileResponseDto createdProfile = userPServ.createUserProfile(userProfileRequestDto);
             return new ResponseEntity<>(createdProfile, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);

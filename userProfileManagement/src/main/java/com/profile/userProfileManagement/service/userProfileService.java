@@ -52,7 +52,7 @@ public class userProfileService {
 
 
 
-    public userProfile createUserProfile(userProfileRequestDto dto) throws Exception{
+    public userProfileResponseDto createUserProfile(userProfileRequestDto dto) throws Exception{
         userProfile u = new userProfile();
         u.setEmail(dto.getEmail());
         u.setGender(dto.getGender());
@@ -67,7 +67,15 @@ public class userProfileService {
         if (userPRepo.findOneByEmail(dto.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists " + dto.getEmail());
         }
-        return userPRepo.save(u);
+        u = userPRepo.save(u);
+    
+        userProfileResponseDto resDto = new userProfileResponseDto();
+        resDto.setEmail(u.getEmail());
+        resDto.setGender(u.getGender());
+        resDto.setNotifications(u.getNotifications());
+        resDto.setUsername(u.getUsername());
+        return resDto;
+
     }
 
     public ResponseEntity<Object> login(loginDto dto){
