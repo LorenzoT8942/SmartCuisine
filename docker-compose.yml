@@ -82,6 +82,23 @@ services:
       postgresql:
         condition: service_healthy
 
+  notification-management:
+    container_name: notification-management
+    image: notification-management
+    build:
+      context: ./notificationManagement
+    ports:
+      - "3003:3000"
+    networks:
+      - rabbit-network
+      - app-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+
+
 volumes:
   rabbitmq_data:
     driver: local

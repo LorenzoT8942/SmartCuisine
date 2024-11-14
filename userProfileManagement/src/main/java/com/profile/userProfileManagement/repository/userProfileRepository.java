@@ -5,17 +5,17 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.profile.userProfileManagement.model.userProfile;
+import com.profile.userProfileManagement.model.UserProfile;
 
 
 
 @Repository
-public interface userProfileRepository extends JpaRepository<userProfile, String> {
+public interface userProfileRepository extends JpaRepository<UserProfile, String> {
 
-    Optional<userProfile> findByUsernameAndHashPassword(String username, String hash_pass);
+    Optional<UserProfile> findByUsernameAndHashPassword(String username, String hash_pass);
 
-    Optional<userProfile> findOneByusername(String username);
-    Optional<userProfile> findOneByEmail(String email);
+    Optional<UserProfile> findOneByusername(String username);
+    Optional<UserProfile> findOneByEmail(String email);
 
 
 }

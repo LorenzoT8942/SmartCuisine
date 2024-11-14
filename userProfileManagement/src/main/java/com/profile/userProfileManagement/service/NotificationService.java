@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.profile.userProfileManagement.dtos.requests.rabbitMQNotificationDto;
 import com.profile.userProfileManagement.model.Notification;
-import com.profile.userProfileManagement.model.userProfile;
+import com.profile.userProfileManagement.model.UserProfile;
 import com.profile.userProfileManagement.repository.NotificationRepository;
 import com.profile.userProfileManagement.repository.userProfileRepository;
 
@@ -25,7 +25,7 @@ public class NotificationService {
 
     @Transactional
     public void addNotification(rabbitMQNotificationDto not){
-        Optional<userProfile> user = userRepo.findOneByusername(not.getUserProfileUsername());
+        Optional<UserProfile> user = userRepo.findOneByusername(not.getUserProfileUsername());
 
         System.out.println(not);
 

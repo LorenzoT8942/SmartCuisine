@@ -23,12 +23,12 @@ public class Notification {
     @Column(name = "notificationId")
     private Long notificationId;
 
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "userProfile", nullable = false)
-    private userProfile userProfile;
+    private UserProfile userProfile;
 
 }
