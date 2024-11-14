@@ -1,4 +1,6 @@
 .vscode/
 .idea/
 
-./postgresql/data/*
+postgresql/data/
+
+rabbitmq/rabbitmq_data/
