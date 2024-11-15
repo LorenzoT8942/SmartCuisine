@@ -4,10 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class IngredientRequestDTO {
-    private String name;      // Nome dell'ingrediente
-    private String quantity;  // Quantità richiesta dall'utente
+
+    private Long ingredientId;  // ID dell'ingrediente
+    private Float quantity;    // Quantità dell'ingrediente (es. "2 kg", "1 liter")
 }

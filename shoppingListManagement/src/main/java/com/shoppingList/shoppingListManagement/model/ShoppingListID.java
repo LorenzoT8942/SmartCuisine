@@ -14,9 +14,9 @@ import java.io.Serializable;
 @Embeddable
 public class ShoppingListID implements Serializable {
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "shopping_list_name")
+    private String shoppingListName;
 }

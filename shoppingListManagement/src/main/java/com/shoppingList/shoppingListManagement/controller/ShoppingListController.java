@@ -1,6 +1,9 @@
 package com.shoppingList.shoppingListManagement.controller;
 
+import com.shoppingList.shoppingListManagement.dtos.request.AddIngredientRequestDTO;
+import com.shoppingList.shoppingListManagement.dtos.request.IngredientRequestDTO;
 import com.shoppingList.shoppingListManagement.dtos.request.ShoppingListRequestDTO;
+import com.shoppingList.shoppingListManagement.dtos.response.AddIngredientResponseDTO;
 import com.shoppingList.shoppingListManagement.dtos.response.ShoppingListResponseDTO;
 import com.shoppingList.shoppingListManagement.service.ShoppingListService;
 import com.shoppingList.shoppingListManagement.utilities.JWTContext;
@@ -60,5 +63,10 @@ public class ShoppingListController {
     public void deleteShoppingList(@PathVariable String name) {
         String username = JWTContext.get();
         shoppingListService.deleteShoppingList(username, name);
+    }
+
+    @PostMapping("/add-ingredient")
+    public AddIngredientResponseDTO addIngredientToShoppingList(@RequestBody AddIngredientRequestDTO addIngredientRequestDTO) {
+        return shoppingListService.addIngredientToShoppingList(addIngredientRequestDTO);
     }
 }

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IngredientResponseDTO {
-    private Long id;         // Identificativo unico dell'ingrediente
-    private String name;     // Nome dell'ingrediente
-    private String quantity; // Quantità disponibile
+    private Long ingredientId;
+    private Float quantity;
 }

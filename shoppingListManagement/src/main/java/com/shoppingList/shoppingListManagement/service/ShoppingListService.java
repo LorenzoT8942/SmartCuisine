@@ -1,6 +1,9 @@
 package com.shoppingList.shoppingListManagement.service;
 
+import com.shoppingList.shoppingListManagement.dtos.IngredientDTO;
+import com.shoppingList.shoppingListManagement.dtos.request.AddIngredientRequestDTO;
 import com.shoppingList.shoppingListManagement.dtos.request.ShoppingListRequestDTO;
+import com.shoppingList.shoppingListManagement.dtos.response.AddIngredientResponseDTO;
 import com.shoppingList.shoppingListManagement.dtos.response.ShoppingListResponseDTO;
 import com.shoppingList.shoppingListManagement.model.ShoppingList;
 import com.shoppingList.shoppingListManagement.model.ShoppingListID;
@@ -55,7 +58,8 @@ public class ShoppingListService {
         ShoppingListID shoppingListId = new ShoppingListID(username, shoppingListRequestDTO.getName());
 
         // Create ShoppingList entity and save to the repository
-        ShoppingList shoppingList = new ShoppingList(shoppingListId);
+        ShoppingList shoppingList = new ShoppingList();
+        shoppingList.setId(shoppingListId);
         ShoppingList savedList = shoppingListRepository.save(shoppingList);
         return convertToResponseDTO(savedList);
     }
@@ -72,6 +76,46 @@ public class ShoppingListService {
     }
 
     /**
+     * Add an ingredient to an existing shopping list.
+     *
+     * @param addIngredientRequestDTO The data of the ingredient to be added
+     * @return Updated ShoppingListResponseDTO
+     */
+    public AddIngredientResponseDTO addIngredientToShoppingList(AddIngredientRequestDTO addIngredientRequestDTO) {
+        // Find the shopping list to which save the ingredient
+        ShoppingListID shoppingListId = new ShoppingListID(
+                addIngredientRequestDTO.getUsername(),
+                addIngredientRequestDTO.getShoppingListName()
+        );
+
+        ShoppingList shoppingList = shoppingListRepository.findOneByShoppingListID(shoppingListId)
+                .orElseThrow(() -> new RuntimeException("Shopping list not found"));
+
+        // Iterate over all ingredients from the request DTO
+        for (IngredientDTO ingredientRequest : addIngredientRequestDTO.getIngredients()) {
+            Long ingredientId = ingredientRequest.getIngredientId();
+            float quantityToAdd = ingredientRequest.getQuantity();
+
+
+            // Use the addIngredient method of ShoppingList to add or update the ingredient
+            if (shoppingList.getIngredients().containsKey(ingredientId)) {
+                float existingQuantity = shoppingList.getIngredients().get(ingredientId);
+                shoppingList.addIngredient(ingredientId, existingQuantity + quantityToAdd);
+            } else {
+                shoppingList.addIngredient(ingredientId, quantityToAdd);
+            }
+        }
+
+        //
+
+        // Save the updated shopping list in the repository
+        ShoppingList updatedList = shoppingListRepository.save(shoppingList);
+        return convertToAddIngredientResponseDTO(updatedList);
+    }
+
+
+
+    /**
      * Helper method to convert ShoppingList entity to ShoppingListResponseDTO.
      *
      * @param shoppingList The shopping list entity to convert
@@ -80,7 +124,16 @@ public class ShoppingListService {
     private ShoppingListResponseDTO convertToResponseDTO(ShoppingList shoppingList) {
         ShoppingListResponseDTO dto = new ShoppingListResponseDTO();
         dto.setUsername(shoppingList.getId().getUsername());
-        dto.setName(shoppingList.getId().getName());
+        dto.setName(shoppingList.getId().getShoppingListName());
         return dto;
+    }
+
+
+    private AddIngredientResponseDTO convertToAddIngredientResponseDTO(ShoppingList shoppingList) {
+        AddIngredientResponseDTO responseDTO = new AddIngredientResponseDTO();
+        responseDTO.setUsername(shoppingList.getId().getUsername());
+        responseDTO.setShoppingListName(shoppingList.getId().getShoppingListName());
+        responseDTO.setIngredients(shoppingList.getIngredients());
+        return responseDTO;
     }
 }
