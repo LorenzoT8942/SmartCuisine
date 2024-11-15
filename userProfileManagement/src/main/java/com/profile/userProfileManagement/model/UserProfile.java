@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "userProfiles")
-public class userProfile {
+public class UserProfile {
 
     @Email
     @Column(name = "email", nullable = false, unique = true)

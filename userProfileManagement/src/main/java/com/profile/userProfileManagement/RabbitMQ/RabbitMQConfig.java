@@ -1,12 +1,18 @@
 package com.profile.userProfileManagement.RabbitMQ;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import com.profile.userProfileManagement.dtos.requests.rabbitMQNotificationDto;
 
 
 @Configuration
@@ -20,8 +26,17 @@ public class RabbitMQConfig {
 
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
-        // Use Jackson for JSON to object conversion
-        return new Jackson2JsonMessageConverter();
+         Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
+        DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
+
+        // Define the type ID mapping
+        Map<String, Class<?>> idClassMapping = new HashMap<>();
+        idClassMapping.put("com.notification.notificationManagement.dtos.requests.rabbitMQNotificationDto", rabbitMQNotificationDto.class);
+        
+        // Apply the type ID mappings to the type mapper
+        typeMapper.setIdClassMapping(idClassMapping);
+        converter.setJavaTypeMapper(typeMapper);
+        return converter;
     }
 
     @Bean

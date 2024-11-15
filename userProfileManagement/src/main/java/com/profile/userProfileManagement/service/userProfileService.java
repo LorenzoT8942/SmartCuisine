@@ -20,7 +20,7 @@ import com.profile.userProfileManagement.dtos.requests.loginDto;
 import com.profile.userProfileManagement.dtos.requests.userProfileRequestDto;
 import com.profile.userProfileManagement.dtos.responses.JWTResponse;
 import com.profile.userProfileManagement.dtos.responses.userProfileResponseDto;
-import com.profile.userProfileManagement.model.userProfile;
+import com.profile.userProfileManagement.model.UserProfile;
 import com.profile.userProfileManagement.repository.userProfileRepository;
 
 @Service
@@ -52,8 +52,8 @@ public class userProfileService {
 
 
 
-    public userProfile createUserProfile(userProfileRequestDto dto) throws Exception{
-        userProfile u = new userProfile();
+    public userProfileResponseDto createUserProfile(userProfileRequestDto dto) throws Exception{
+        UserProfile u = new UserProfile();
         u.setEmail(dto.getEmail());
         u.setGender(dto.getGender());
         u.setUsername(dto.getUsername());
@@ -67,12 +67,20 @@ public class userProfileService {
         if (userPRepo.findOneByEmail(dto.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists " + dto.getEmail());
         }
-        return userPRepo.save(u);
+        u = userPRepo.save(u);
+    
+        userProfileResponseDto resDto = new userProfileResponseDto();
+        resDto.setEmail(u.getEmail());
+        resDto.setGender(u.getGender());
+        resDto.setNotifications(u.getNotifications());
+        resDto.setUsername(u.getUsername());
+        return resDto;
+
     }
 
     public ResponseEntity<Object> login(loginDto dto){
 
-        Optional<userProfile> up = userPRepo.findOneByusername(dto.getUsername());
+        Optional<UserProfile> up = userPRepo.findOneByusername(dto.getUsername());
 
         //Optional<userProfile> up = userPRepo.findByUsernameAndHashPassword(dto.getUsername(), hashPassword(dto.getPassword()));
         if (up.isEmpty()) return new ResponseEntity<>("username not present", HttpStatus.NOT_FOUND);
@@ -100,9 +108,9 @@ public class userProfileService {
 
 
     public userProfileResponseDto getprofile(String username){
-        Optional<userProfile> up = userPRepo.findOneByusername(username);
+        Optional<UserProfile> up = userPRepo.findOneByusername(username);
         if (up.isEmpty()) return null;
-        userProfile user = up.get();
+        UserProfile user = up.get();
 
         userProfileResponseDto dto = new userProfileResponseDto();
         dto.setEmail(user.getEmail());
