@@ -20,7 +20,10 @@ public class RabbitMQConsumerService {
     private NotificationService notServ;
 
     public void processNotification(rabbitMQNotificationDto notification){
-        notServ.addNotification(notification);
+        try{notServ.addNotification(notification);}
+        catch(IllegalStateException e){
+            System.out.println("Impossible to save the Notification due to "+e.getMessage());
+        }
     }
 
 }

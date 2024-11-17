@@ -24,8 +24,8 @@ public class NotificationService {
 
 
     @Transactional
-    public void addNotification(rabbitMQNotificationDto not){
-        Optional<UserProfile> user = userRepo.findOneByusername(not.getUserProfileUsername());
+    public void addNotification(rabbitMQNotificationDto not) throws IllegalStateException{
+        Optional<UserProfile> user = userRepo.findOneByUsername(not.getUserProfileUsername());
 
         System.out.println(not);
 

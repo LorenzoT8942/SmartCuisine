@@ -14,8 +14,9 @@ public interface userProfileRepository extends JpaRepository<UserProfile, String
 
     Optional<UserProfile> findByUsernameAndHashPassword(String username, String hash_pass);
 
-    Optional<UserProfile> findOneByusername(String username);
+    Optional<UserProfile> findOneByUsername(String username);
     Optional<UserProfile> findOneByEmail(String email);
+    Optional<UserProfile> findOneByUsernameOrEmail(String user, String email);
 
 
 }

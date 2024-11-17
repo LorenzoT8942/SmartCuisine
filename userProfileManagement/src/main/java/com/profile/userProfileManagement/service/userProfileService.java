@@ -16,12 +16,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.profile.userProfileManagement.dtos.requests.loginDto;
 import com.profile.userProfileManagement.dtos.requests.userProfileRequestDto;
+import com.profile.userProfileManagement.dtos.requests.userProfileUpdateDto;
 import com.profile.userProfileManagement.dtos.responses.JWTResponse;
 import com.profile.userProfileManagement.dtos.responses.userProfileResponseDto;
 import com.profile.userProfileManagement.model.UserProfile;
 import com.profile.userProfileManagement.repository.userProfileRepository;
+import com.profile.userProfileManagement.utilities.JWTContext;
 
 @Service
 public class userProfileService {
@@ -37,6 +40,9 @@ public class userProfileService {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
 
 
@@ -59,28 +65,21 @@ public class userProfileService {
         u.setUsername(dto.getUsername());
         u.setHashPassword(hashPassword(dto.getPassword()));
 
-        if (userPRepo.findOneByusername(dto.getUsername()).isPresent()) {
+        if (userPRepo.findOneByUsername(dto.getUsername()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Profile already created for user " + dto.getUsername());
         }
 
-        //check if email already exists
         if (userPRepo.findOneByEmail(dto.getEmail()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists " + dto.getEmail());
         }
         u = userPRepo.save(u);
-    
-        userProfileResponseDto resDto = new userProfileResponseDto();
-        resDto.setEmail(u.getEmail());
-        resDto.setGender(u.getGender());
-        resDto.setNotifications(u.getNotifications());
-        resDto.setUsername(u.getUsername());
-        return resDto;
 
+        return objectMapper.convertValue(u, userProfileResponseDto.class);
     }
 
     public ResponseEntity<Object> login(loginDto dto){
 
-        Optional<UserProfile> up = userPRepo.findOneByusername(dto.getUsername());
+        Optional<UserProfile> up = userPRepo.findOneByUsername(dto.getUsername());
 
         //Optional<userProfile> up = userPRepo.findByUsernameAndHashPassword(dto.getUsername(), hashPassword(dto.getPassword()));
         if (up.isEmpty()) return new ResponseEntity<>("username not present", HttpStatus.NOT_FOUND);
@@ -108,17 +107,35 @@ public class userProfileService {
 
 
     public userProfileResponseDto getprofile(String username){
-        Optional<UserProfile> up = userPRepo.findOneByusername(username);
+        Optional<UserProfile> up = userPRepo.findOneByUsername(username);
         if (up.isEmpty()) return null;
         UserProfile user = up.get();
+        return objectMapper.convertValue(user, userProfileResponseDto.class);
+    }
 
-        userProfileResponseDto dto = new userProfileResponseDto();
-        dto.setEmail(user.getEmail());
-        dto.setGender(user.getGender());
-        dto.setUsername(user.getUsername());
-        dto.setNotifications(user.getNotifications());
+    public ResponseEntity<String> deleteprofile(String user){
+        if(!user.equals(JWTContext.get())) return new ResponseEntity<>("Username not corresponding wrt the logged one", HttpStatus.FORBIDDEN);
+        Optional<UserProfile> us = userPRepo.findOneByUsername(user);
+        if(us.isEmpty()) return new ResponseEntity<>("Username not found in the system", HttpStatus.NOT_FOUND);
+        userPRepo.delete(us.get());
+        return new ResponseEntity<>("Deleted the user "+user+" correctly", HttpStatus.OK);
+    }
 
-        return dto;
+
+    public ResponseEntity<Object> updateprofile(String user, userProfileUpdateDto dto){
+        if(!user.equals(JWTContext.get())) return new ResponseEntity<>("Username not corresponding wrt the logged one", HttpStatus.FORBIDDEN);
+        Optional<UserProfile> us = userPRepo.findOneByUsername(user);
+        if(us.isEmpty()) return new ResponseEntity<>("The username object of the request was not found in the system", HttpStatus.NOT_FOUND);
+        UserProfile up = us.get();
+
+        if(dto.getEmail()!= null && userPRepo.findOneByEmail(dto.getEmail()).isPresent()) return new ResponseEntity<>("The email already exists", HttpStatus.FORBIDDEN);
+        
+        if(dto.getEmail() != null) up.setEmail(dto.getEmail());
+        if(dto.getGender() != null) up.setGender(dto.getGender());
+        if(dto.getPassword() != null) up.setHashPassword(hashPassword(dto.getPassword()));
+
+        up = userPRepo.save(up);
+        return new ResponseEntity<>(objectMapper.convertValue(up, userProfileResponseDto.class), HttpStatus.OK);
     }
 
 

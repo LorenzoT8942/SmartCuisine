@@ -1,6 +1,7 @@
 package com.profile.userProfileManagement.dtos.requests;
 
-import jakarta.validation.constraints.NotNull;
+import com.profile.userProfileManagement.model.enums.genderEnum;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,11 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class loginDto {
+public class userProfileUpdateDto {
     
-    @NotNull
-    private String username;
+    private String email;
 
-    @NotNull
+    private genderEnum gender;
+
     private String password;
+
 }

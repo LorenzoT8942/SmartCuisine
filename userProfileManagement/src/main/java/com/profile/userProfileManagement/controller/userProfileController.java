@@ -3,17 +3,22 @@ package com.profile.userProfileManagement.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.profile.userProfileManagement.dtos.requests.loginDto;
 import com.profile.userProfileManagement.dtos.requests.userProfileRequestDto;
+import com.profile.userProfileManagement.dtos.requests.userProfileUpdateDto;
 import com.profile.userProfileManagement.dtos.responses.userProfileResponseDto;
 import com.profile.userProfileManagement.service.userProfileService;
 import com.profile.userProfileManagement.utilities.JWTContext;
+
 
 
 @RestController
@@ -51,9 +56,16 @@ public class userProfileController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         }
     }
-    
 
 
+    @DeleteMapping("/profile/{username}")
+    public ResponseEntity<String> deleteProfile(@PathVariable String username){
+        return userPServ.deleteprofile(username);
+    }
 
+    @PutMapping("profile/{username}")
+    public ResponseEntity<Object> updateProfile(@PathVariable String username, @RequestBody userProfileUpdateDto entity) {
+        return userPServ.updateprofile(username, entity);
+    }
 
 }

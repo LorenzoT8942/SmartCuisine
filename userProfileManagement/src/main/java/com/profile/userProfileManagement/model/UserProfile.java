@@ -46,6 +46,7 @@ public class UserProfile {
             joinColumns = @JoinColumn(name="userProfile_username", referencedColumnName="username"),
             inverseJoinColumns=@JoinColumn(name="notification_id", referencedColumnName="notificationId")
     )
+    @Column(updatable = false)
     private List<Notification> notifications = new ArrayList<>();
 
 
