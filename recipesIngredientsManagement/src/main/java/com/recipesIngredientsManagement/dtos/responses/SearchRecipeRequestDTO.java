@@ -1,4 +1,4 @@
-package com.recipesIngredientsManagement.dtos;
+package com.recipesIngredientsManagement.dtos.responses;
 
 
 import lombok.AllArgsConstructor;
@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 public class RecipeDTO {
     private Long id;
     private String name;
-    private String steps;
 }
