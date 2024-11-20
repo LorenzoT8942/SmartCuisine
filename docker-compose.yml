@@ -98,6 +98,19 @@ services:
       rabbitmq:
         condition: service_started
 
+  recipesingredients-management:
+    container_name: recipesingredients-management
+    image: recipesingredients-management
+    build:
+      context: ./recipesIngredientsManagement
+    ports:
+      - "3004:3000"
+    networks:
+      - app-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
+
 
 volumes:
   rabbitmq_data:
