@@ -1,4 +1,4 @@
-package com.profile.userProfileManagement.security;
+package com.recipesIngredientsManagement.security;
 
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

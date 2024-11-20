@@ -1,4 +1,4 @@
-package com.recipesIngredientsManagement.dtos.responses.searchRecipeResponse;
+package com.recipesIngredientsManagement.dtos.responses.searchRecipeInformationResponse;
 
 import lombok.Data;
 

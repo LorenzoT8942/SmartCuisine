@@ -1,13 +1,13 @@
-package com.example.demo;
+package com.recipesIngredientsManagement;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class Application {
+public class recipesIngredientsManagerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(recipesIngredientsManagerApplication.class, args);
 	}
 
 }

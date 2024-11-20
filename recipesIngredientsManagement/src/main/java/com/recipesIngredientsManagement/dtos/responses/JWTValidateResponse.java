@@ -1,4 +1,4 @@
-package com.profile.userProfileManagement.dtos.responses;
+package com.recipesIngredientsManagement.dtos.responses;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

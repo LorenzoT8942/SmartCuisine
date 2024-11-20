@@ -3,7 +3,9 @@ package com.recipesIngredientsManagement.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +16,7 @@ import java.util.List;
 public class Recipe {
 
     @Id
-    @Column(name = "recipeId")
+    @Column(name = "recipe_id")
     private Long recipeId;
 
     @Column(name = "recipeName")
@@ -32,8 +34,12 @@ public class Recipe {
     @Column(name = "steps")
     private String steps;
 
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ingredient> ingredients;
-
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "recipe_ingredient", // Join table name
+            joinColumns = @JoinColumn(name = "recipe_id"), // Foreign key for Recipe
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id") // Foreign key for Ingredient
+    )
+    private Set<Ingredient> ingredients = new HashSet<>();
 }
 

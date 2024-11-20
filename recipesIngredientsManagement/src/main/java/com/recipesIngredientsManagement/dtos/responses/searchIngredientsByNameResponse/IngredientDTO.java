@@ -1,9 +1,7 @@
-package com.recipesIngredientsManagement.dtos.responses;
+package com.recipesIngredientsManagement.dtos.responses.searchIngredientsByNameResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 @AllArgsConstructor

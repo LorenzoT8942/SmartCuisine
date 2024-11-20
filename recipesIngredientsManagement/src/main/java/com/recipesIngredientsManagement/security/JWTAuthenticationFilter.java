@@ -1,7 +1,10 @@
-package com.profile.userProfileManagement.security;
+package com.recipesIngredientsManagement.security;
 
-import java.io.IOException;
-
+import com.recipesIngredientsManagement.dtos.responses.JWTValidateResponse;
+import com.recipesIngredientsManagement.utilities.JWTContext;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -11,17 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.profile.userProfileManagement.dtos.responses.JWTValidateResponse;
-import com.profile.userProfileManagement.utilities.JWTContext;
-
-import jakarta.servlet.Filter;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Component
 public class JWTAuthenticationFilter implements Filter{

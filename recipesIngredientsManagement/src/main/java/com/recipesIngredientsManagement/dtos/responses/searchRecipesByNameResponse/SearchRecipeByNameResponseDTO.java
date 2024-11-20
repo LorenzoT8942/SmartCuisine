@@ -1,7 +1,10 @@
 package com.recipesIngredientsManagement.dtos.responses.searchRecipesByNameResponse;
 
+import lombok.Data;
+
 import java.util.List;
 
+@Data
 public class SearchRecipeByNameResponseDTO {
 
     private int offset;

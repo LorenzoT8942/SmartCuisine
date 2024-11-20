@@ -1,12 +1,10 @@
 package com.recipesIngredientsManagement.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,10 +15,13 @@ import lombok.*;
 public class Ingredient {
 
     @Id
-    @Column(name = "IngredientId")
+    @Column(name = "ingredient_id", nullable = false)
     private Long ingredientId;
 
     @Column(name = "recipeName")
-    private String ingrdientName;
+    private String ingredientName;
+
+    @ManyToMany(mappedBy = "ingredients", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private Set<Recipe> recipes = new HashSet<>();
 
 }

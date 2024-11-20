@@ -1,4 +1,6 @@
-package com.profile.userProfileManagement.security;
+package com.recipesIngredientsManagement.security;
+
+import com.recipesIngredientsManagement.security.JWTAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

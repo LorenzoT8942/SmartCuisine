@@ -1,4 +1,4 @@
-package com.recipesIngredientsManagement.dtos.responses.searchRecipeResponse;
+package com.recipesIngredientsManagement.dtos.responses.searchRecipeInformationResponse;
 
 import lombok.Data;
 
@@ -42,6 +42,4 @@ public class ExtendedRecipeDTO {
     private String instructions;
     private List<Object> analyzedInstructions; // If further details about instructions are known, replace `Object` with another DTO.
     private Double spoonacularScore;
-
-    // Getters and Setters (can use Lombok @Data for brevity)
 }

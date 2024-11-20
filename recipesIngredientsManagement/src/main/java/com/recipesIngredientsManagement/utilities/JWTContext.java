@@ -1,4 +1,4 @@
-package com.profile.userProfileManagement.utilities;
+package com.recipesIngredientsManagement.utilities;
 
 
 public class JWTContext {
