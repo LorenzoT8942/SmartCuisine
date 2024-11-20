@@ -102,7 +102,7 @@ services:
     container_name: recipesingredients-management
     image: recipesingredients-management
     build:
-      context: ./recipesIngredientsManagement
+      context: ./receipesAndIngredientManagement
     ports:
       - "3004:3000"
     networks:
