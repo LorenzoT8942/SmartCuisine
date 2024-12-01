@@ -111,6 +111,18 @@ services:
       postgresql:
         condition: service_healthy
 
+  storage-management:
+    container_name: storage-management
+    image: storage-management
+    build:
+      context: ./storageManagement
+    ports:
+      - "3005:3000"
+    networks:
+      - app-network
+    depends_on:
+      postgresql:
+        condition: service_healthy
 
 volumes:
   rabbitmq_data:
