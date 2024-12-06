@@ -8,7 +8,7 @@
       {
         "name": "notifications",
         "vhost": "/",
-        "durable": true
+        "durable": false
       }
     ],
     "users": [

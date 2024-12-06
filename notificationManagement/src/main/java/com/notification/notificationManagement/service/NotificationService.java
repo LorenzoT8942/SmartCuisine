@@ -32,6 +32,8 @@ public class NotificationService {
             resDto.setContent(not.getContent());
             resDto.setTimestamp(not.getTimestamp());
             resDto.setUsername(not.getUsername());
+            System.out.println("I am sending the following notification to the queue");
+            System.out.println(not);
             sendNotificationToRabbit(not);
             return Optional.of(resDto);
         } catch(IllegalStateException e){

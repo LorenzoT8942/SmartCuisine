@@ -26,10 +26,12 @@ public class NotificationService {
     @Transactional
     public void addNotification(rabbitMQNotificationDto not) throws IllegalStateException{
         Optional<UserProfile> user = userRepo.findOneByUsername(not.getUserProfileUsername());
-
+        System.out.println("received notification from queue");
         System.out.println(not);
+        Optional<Notification> oldNotification = notRepo.findById(not.getNotificationId());
 
         if(user.isEmpty()) throw new IllegalStateException("username del messaggio non trovato");
+        if(oldNotification.isPresent()) throw new IllegalStateException("there already exists a notification with the same id as this one");
 
         Notification n = new Notification();
         n.setContent(not.getContent());

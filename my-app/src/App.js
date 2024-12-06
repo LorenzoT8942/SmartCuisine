@@ -2,6 +2,12 @@ import logo from './logo.svg';
 import './App.css';
 import './CSS/home-shopping-list.css'
 import {useEffect} from "react";
+import UserProfileComp from './components/UserProfile.tsx'
+import { BrowserRouter as Router, Route, Routes  } from 'react-router-dom';
+import Login from './components/Login.tsx';
+import SignUp from './components/SignUp.tsx';
+
+
 
 const ingredients = [
     { name: 'Eggs', quantity: '428g' },
@@ -23,6 +29,7 @@ const generateIngredientCards = (ingredients) => {
 };
 
 function App() {
+
     useEffect(() => {
         // Set background color when the component mounts
         document.body.style.backgroundColor = '#32cd32';
@@ -33,12 +40,52 @@ function App() {
         // document.body.style.backgroundRepeat = 'no-repeat';
     }, []); // Empty dependency array means this will run only once when the component mounts
 
-    return(
-      <HomePage/>
-  );
+    return (
+        <Router>
+          <Routes>
+            {/* Route for HomePage */}
+            <Route path="/" element={<HomePage />} />
+            
+            {/* Route for UserProfileWithNotifications */}
+            <Route path="/profile" element={<UserProfileComp />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </Router>
+      );
 }
 
 function HomePage() {
+
+    const isLoggedIn = localStorage.getItem('authToken') != null;
+    let loginButton;
+    let logoutButton;
+    let signUpButton;
+    let profileButton;
+    if (isLoggedIn) {
+        logoutButton = (
+            <button onClick={handleLogout} style={{ marginLeft: '10px' }}>
+                Logout
+            </button>
+        );
+        profileButton = (
+            <button onClick={handleProfile} style={{ marginLeft: '10px' }}>
+                Profile
+            </button>
+        );
+    } else {
+        loginButton = (
+            <button onClick={handleLogin} style={{ marginLeft: '10px' }}>
+                Login
+            </button>
+        );
+        signUpButton = (
+            <button onClick={handleSignUp} style={{ marginLeft: '10px' }}>
+                Signup
+            </button>
+        );
+    }
+
     const containerStyles = {
         margin: '0 auto',
         marginTop: '50px',
@@ -52,9 +99,38 @@ function HomePage() {
             <RecipeSearchBar/>
             <HomeShoppingList/>
             <HomeStorage/>
+            <div style={{ marginTop: '20px' }}>
+                {loginButton}
+                {logoutButton}
+                {signUpButton}
+                {profileButton}
+            </div>
         </div>
     );
 }
+
+const handleProfile = () => {
+
+    window.location.href = '/profile';
+
+};
+const handleSignUp = () => {
+
+    window.location.href = '/signup';
+
+};
+
+const handleLogin = () => {
+
+    window.location.href = '/login';
+
+};
+const handleLogout = () => {
+    localStorage.removeItem('authToken'); // Clear the auth token from localStorage
+    alert('Logged out successfully!');
+    window.location.reload();
+  };
+
 
 function HomeShoppingList() {
   return (
