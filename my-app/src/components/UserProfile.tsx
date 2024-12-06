@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { UserProfile } from '../types/UserProfile.ts';
 import { Notification } from '../types/Notification.ts';
+import '../CSS/user-profile.css';
 
 interface UserProfileProps {
   username: string;
@@ -122,33 +123,36 @@ const UserProfileComp: React.FC<UserProfileProps> = ({ username }) => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="loading">Loading...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="error-message">{error}</div>;
   }
 
   if (!userProfile) {
-    return <div>No user profile data available.</div>;
+    return <div className="no-data">No user profile data available.</div>;
   }
 
   return (
-    <div>
-      <h1>{userProfile.username}'s Profile</h1>
-      <div>
+    <div className="profile-container">
+      <h1 className="profile-header">{userProfile.username}'s Profile</h1>
+      <div className="form-container">
+      <div className="form-group">
         <label>
           Email:
+        </label>
           <input
             type="email"
             value={editedFields.email ?? userProfile.email}
             onChange={(e) => handleFieldChange('email', e.target.value)}
           />
-        </label>
       </div>
-      <div>
+      <div className="form-group">
         <label>
           Gender:
+          </label>
+
           <select
             value={editedFields.gender ?? userProfile.gender}
             onChange={(e) => handleFieldChange('gender', e.target.value)}
@@ -157,23 +161,25 @@ const UserProfileComp: React.FC<UserProfileProps> = ({ username }) => {
             <option value={Gender.Male}>{Gender.Male}</option>
             <option value={Gender.Female}>{Gender.Female}</option>
           </select>
-        </label>
       </div>
-      <div>
+      <div className="form-group">
         <label>
           Password:
+          </label>
+
           <input
             type="password"
             value={editedFields.password ?? ''}
             onChange={(e) => handleFieldChange('password', e.target.value)}
           />
-        </label>
       </div>
-      <button onClick={handleUpdate} disabled={Object.keys(editedFields).length === 0}>
+      <button className="update-button" onClick={handleUpdate} disabled={Object.keys(editedFields).length === 0}>
         Update
       </button>
+      </div>
+
       <h3>Notifications</h3>
-      <ul>
+      <ul className="notifications-list">
         {notifications.length === 0 ? (
           <li>No notifications</li>
         ) : (
@@ -185,8 +191,8 @@ const UserProfileComp: React.FC<UserProfileProps> = ({ username }) => {
         )}
       </ul>
 
-      <div>
-        <button onClick={handleDelete}>
+      <div className="delete-button-container">
+        <button className="delete-button" onClick={handleDelete}>
           Delete profile
         </button>
       </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect  } from 'react';
 import axios from 'axios';
+import '../CSS/sign-up.css';
 
 export enum Gender {
     Male = "Male",
@@ -54,15 +55,15 @@ const UserSubscription: React.FC = () => {
   };
 
   if (isAuthorized) {
-    return <p>You need to be logged out to create a profile.</p>;
+    return <p className="error-message">You need to be logged out to create a profile.</p>;
   }
 
 
   return (
-    <div>
-      <h2>User Subscription</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
+    <div className="subscription-container">
+      <h2 className="subscription-header">User Subscription</h2>
+      <form onSubmit={handleSubmit} className="form-container">
+        <div  className="form-group">
           <label>Email:</label>
           <input 
             type="email" 
@@ -72,7 +73,7 @@ const UserSubscription: React.FC = () => {
           />
         </div>
         
-        <div>
+        <div className="form-group">
           <label>Gender:</label>
           <select 
             value={gender} 
@@ -85,7 +86,7 @@ const UserSubscription: React.FC = () => {
           </select>
         </div>
 
-        <div>
+        <div className="form-group">
           <label>Password:</label>
           <input 
             type="password" 
@@ -95,7 +96,7 @@ const UserSubscription: React.FC = () => {
           />
         </div>
 
-        <div>
+        <div className="form-group">
           <label>Username:</label>
           <input 
             type="text" 
@@ -105,13 +106,13 @@ const UserSubscription: React.FC = () => {
           />
         </div>
 
-        <button type="submit">Create Profile</button>
+        <button type="submit" className="create-button">Create Profile</button>
       </form>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-        <div>
-          <button onClick={handleLogin} style={{ marginLeft: '10px' }}>
+      {error && <p className="error-message">{error}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
+        <div className="button-container">
+          <button onClick={handleLogin} className="login-button">
               Login
           </button>
         </div>

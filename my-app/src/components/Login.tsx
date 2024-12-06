@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../CSS/login.css';
 
 const Login: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -43,43 +44,49 @@ const Login: React.FC = () => {
       setError('Login failed. Please check your username and password.');
     }
   };
+  
+  const handleSignUp = () => {
+
+    window.location.href = '/signup';
+  
+  };
 
   if (isAuthorized) {
-    return <p>You need to be logged out to login.</p>;
+    return <p className="error-message">You need to be logged out to login.</p>;
   }
 
   return (
-    <div style={{ marginBottom: '20px' }}>
+    <div className="login-container">
+    <h2 className="login-header">Login</h2>
+    <div className="form-group">
+      <label>Username:</label>
       <input
         type="text"
-        placeholder="Username"
+        placeholder="Enter your username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        style={{ marginRight: '10px' }}
       />
+    </div>
+    <div className="form-group">
+      <label>Password:</label>
       <input
         type="password"
-        placeholder="Password"
+        placeholder="Enter your password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        style={{ marginRight: '10px' }}
       />
-      <button onClick={handleLogin}>Login</button>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      <div>
-        <button onClick={handleSignUp} style={{ marginLeft: '10px' }}>
-          Signup
-        </button>
-      </div>
     </div>
+    <button onClick={handleLogin} className="login-button">
+      Login
+    </button>
+    {error && <p className="error-message">{error}</p>}
+    <div className="button-container">
+      <button onClick={handleSignUp} className="signup-button">
+        Signup
+      </button>
+    </div>
+  </div>
   );
-};
-
-const handleSignUp = () => {
-
-  window.location.href = '/signup';
-
 };
 
 export default Login;
