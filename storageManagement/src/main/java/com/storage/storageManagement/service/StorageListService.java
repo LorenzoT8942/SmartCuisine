@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StorageListService {
@@ -24,29 +26,27 @@ public class StorageListService {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
     /**
-     * Recupera la lista di storage di un utente specifico.
+     * Recupera tutte le entry di storage per un utente specifico.
      *
      * @param username Nome utente dell'utente
-     * @return StorageListResponseDTO contenente i dettagli dello storage dell'utente
+     * @return Lista di StorageListResponseDTO contenente i dettagli di tutte le entry di storage dell'utente
      */
-    public StorageListResponseDTO getStorageByUsername(String username) {
-        // Cerca gli StorageList per l'utente specificato
+    public List<StorageListResponseDTO> getStorageByUsername(String username) {
+        // Cerca tutti gli StorageList per l'utente specificato
         List<StorageList> storageListItems = storageListRepository.findByIdUsername(username);
 
-        StorageList storageList;
-
-        // Se non è presente alcun elemento nella lista, crealo automaticamente
+        // Se la lista è vuota, restituisci una lista vuota senza creare nuove entry
         if (storageListItems.isEmpty()) {
-            StorageListID storageListID = new StorageListID(username, 1L); // Crea un ID con un ingredientId predefinito (o specifico)
-            storageList = new StorageList(storageListID, 0.0f, LocalDate.now().plusYears(10)); // Aggiungi valori predefiniti
-            storageListRepository.save(storageList);
-        } else {
-            // Se ci sono elementi nella lista, prendi il primo (o l'elemento che ha senso prendere)
-            storageList = storageListItems.getFirst();
+            return Collections.emptyList();
         }
 
-        // Converte lo storage recuperato o creato in StorageListResponseDTO e lo restituisce
-        return convertToResponseDTO(storageList);
+        // Converte tutte le entry di storage recuperate in una lista di StorageListResponseDTO
+        List<StorageListResponseDTO> responseDTOList = storageListItems.stream()
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
+
+        // Restituisce la lista di DTO contenenti i dettagli di tutte le entry
+        return responseDTOList;
     }
 
 
@@ -70,7 +70,7 @@ public class StorageListService {
 
         // Crea o trova la lista di storage per l'utente e l'ingrediente
         StorageListID storageListID = new StorageListID(request.getUsername(), request.getIngredientId());
-        Optional<StorageList> optionalStorageList = storageListRepository.findById(String.valueOf(storageListID));
+        Optional<StorageList> optionalStorageList = storageListRepository.findById(storageListID);
 
         StorageList storageList;
         if (optionalStorageList.isPresent()) {

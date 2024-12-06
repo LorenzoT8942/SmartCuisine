@@ -3,8 +3,11 @@ package com.storage.storageManagement.controller;
 import com.storage.storageManagement.dtos.request.AddIngredientRequestDTO;
 import com.storage.storageManagement.dtos.response.StorageListResponseDTO;
 import com.storage.storageManagement.service.StorageListService;
+import com.storage.storageManagement.utilities.JWTContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/storage")
@@ -20,7 +23,10 @@ public class StorageListController {
      * @return StorageListResponseDTO containing user's storage details
      */
     @GetMapping("/{username}")
-    public StorageListResponseDTO getStorageByUsername(@PathVariable String username) {
+    public List<StorageListResponseDTO> getStorageByUsername(@PathVariable String username) {
+        if (!JWTContext.get().equals(username)) {
+            throw new CustomUnauthorizedException("User is not authorized to access this resource");
+        }
         return storageListService.getStorageByUsername(username);
     }
 
@@ -34,4 +40,12 @@ public class StorageListController {
     public StorageListResponseDTO addIngredientToStorage(@RequestBody AddIngredientRequestDTO addIngredientRequest) {
         return storageListService.addIngredientToStorage(addIngredientRequest);
     }
+
+    public static class CustomUnauthorizedException extends RuntimeException {
+        public CustomUnauthorizedException(String message) {
+            super(message);
+        }
+    }
 }
+
+
