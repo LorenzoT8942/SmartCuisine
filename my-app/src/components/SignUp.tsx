@@ -110,8 +110,20 @@ const UserSubscription: React.FC = () => {
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+        <div>
+          <button onClick={handleLogin} style={{ marginLeft: '10px' }}>
+              Login
+          </button>
+        </div>
     </div>
+            
   );
+};
+
+const handleLogin = () => {
+
+  window.location.href = '/login';
+
 };
 
 export default UserSubscription;

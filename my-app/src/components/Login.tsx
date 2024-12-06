@@ -66,8 +66,20 @@ const Login: React.FC = () => {
       />
       <button onClick={handleLogin}>Login</button>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <div>
+        <button onClick={handleSignUp} style={{ marginLeft: '10px' }}>
+          Signup
+        </button>
+      </div>
     </div>
   );
+};
+
+const handleSignUp = () => {
+
+  window.location.href = '/signup';
+
 };
 
 export default Login;
