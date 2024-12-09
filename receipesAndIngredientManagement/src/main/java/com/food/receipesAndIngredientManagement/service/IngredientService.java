@@ -6,8 +6,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import com.food.receipesAndIngredientManagement.dtos.responses.searchIngredientInfo.IngredientInfoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,20 +25,6 @@ public class IngredientService {
     private IngredientRepository ingredientRepository;
 
     public List<IngredientDTO> searchByName(String name) {
-        return ingredientRepository.findByIngredientNameContainingIgnoreCase(name)
-                .stream()
-                .map(ingredient -> new IngredientDTO(ingredient.getIngredientId(), ingredient.getIngredientName(), null))
-                .collect(Collectors.toList());
-    }
-
-    // Find ingredient by ID
-    public IngredientDTO findById(Long id) {
-        return ingredientRepository.findById(id)
-                .map(ingredient -> new IngredientDTO(ingredient.getIngredientId(), ingredient.getIngredientName(), null))
-                .orElseThrow(() -> new IllegalArgumentException("Ingredient not found with ID: " + id));
-    }
-
-    public List<IngredientDTO> searchIngredientsByName(String name){
         List<IngredientDTO> ingredients = new ArrayList<>();
         // Specify the API URL
         String url = "https://api.spoonacular.com/ingredients/complexSearch?query=" + name.strip();
@@ -52,16 +38,15 @@ public class IngredientService {
                     .header("Authorization", "Bearer " + API_KEY)
                     .GET()
                     .build();
-            
+
             try {
                 // Send the request and get the response
                 HttpResponse<String> jsonResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
-                String jsonResponseToStr = jsonResponse.body();
 
                 ObjectMapper objectMapper = new ObjectMapper();
 
                 // Parse JSON into IngredientResponseDTO
-                SearchIngredientsResponseDTO responseDTO = objectMapper.readValue(jsonResponseToStr, SearchIngredientsResponseDTO.class);
+                SearchIngredientsResponseDTO responseDTO = objectMapper.readValue(jsonResponse.body(), SearchIngredientsResponseDTO.class);
 
                 // Access individual ingredients
                 ingredients = responseDTO.getResults();
@@ -76,4 +61,41 @@ public class IngredientService {
 
         return ingredients;
     }
+
+    // Find ingredient by ID
+    public IngredientInfoDTO searchIngredientInfo(Long id) {
+
+        IngredientInfoDTO ingredientInfo = new IngredientInfoDTO();
+        // Specify the API URL
+        String url = "https://api.spoonacular.com/food/ingredients/" + id.toString() + "/information?apiKey=" + API_KEY;
+
+        // Create an HttpClient
+        try (HttpClient client = HttpClient.newHttpClient()) {
+
+            // Build the HttpRequest
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .header("Authorization", "Bearer " + API_KEY)
+                    .GET()
+                    .build();
+
+            try {
+                // Send the request and get the response
+                HttpResponse<String> jsonResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                ObjectMapper objectMapper = new ObjectMapper();
+
+                // Parse JSON into IngredientResponseDTO
+                ingredientInfo = objectMapper.readValue(jsonResponse.body(), IngredientInfoDTO.class);
+
+            } catch (Exception e) {
+                // Handle exceptions
+                System.out.println("An error occurred: " + e.getMessage());
+            }
+        }
+
+        return ingredientInfo;
+    }
+
+
 }

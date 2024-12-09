@@ -3,6 +3,7 @@ package com.food.receipesAndIngredientManagement.controller;
 
 import java.util.List;
 
+import com.food.receipesAndIngredientManagement.dtos.responses.searchIngredientInfo.IngredientInfoDTO;
 import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipeInformationResponse.RecipeInfoResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.food.receipesAndIngredientManagement.dtos.responses.SearchRecipeRequestDTO;
 import com.food.receipesAndIngredientManagement.dtos.responses.searchIngredientsByNameResponse.IngredientDTO;
 import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipesByNameResponse.RecipeResultDTO;
 import com.food.receipesAndIngredientManagement.service.IngredientService;
@@ -39,8 +39,8 @@ public class RecipesIngredientsController {
 
     // Find an ingredient by ID
     @GetMapping("/ingredients/search-by-id/{id}")
-    public ResponseEntity<IngredientDTO> searchIngredientById(@PathVariable Long id) {
-        IngredientDTO ingredient = ingredientService.findById(id);
+    public ResponseEntity<IngredientInfoDTO> searchIngredientById(@PathVariable Long id) {
+        IngredientInfoDTO ingredient = ingredientService.searchIngredientInfo(id);
         return ResponseEntity.ok(ingredient);
     }
 
@@ -56,13 +56,4 @@ public class RecipesIngredientsController {
         RecipeInfoResponseDTO recipe = recipeService.searchRecipeInfo(id);
         return ResponseEntity.ok(recipe);
     }
-
-/*
-    // Search for recipes containing an ingredient
-    @GetMapping("/recipes/search-by-ingredient")
-    public ResponseEntity<List<SearchRecipeRequestDTO>> searchRecipesByIngredient(@RequestParam String ingredientName) {
-        List<SearchRecipeRequestDTO> recipes = recipeService.searchByIngredientName(ingredientName);
-        return ResponseEntity.ok(recipes);
-    }
-*/
 }
