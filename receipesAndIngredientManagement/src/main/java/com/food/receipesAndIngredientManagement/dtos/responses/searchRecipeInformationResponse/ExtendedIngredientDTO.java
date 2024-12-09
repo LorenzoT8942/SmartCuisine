@@ -5,7 +5,6 @@ import java.util.List;
 
 @Data
 public class ExtendedIngredientDTO {
-
     private int id;
     private String aisle;
     private String image;

@@ -9,6 +9,4 @@ public class RecipeResultDTO {
     private String title;
     private String image;
     private String imageType;
-
-    // Getters and Setters
 }

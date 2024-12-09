@@ -5,8 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ExtendedRecipeDTO {
-
+public class RecipeInfoResponseDTO {
     private boolean vegetarian;
     private boolean vegan;
     private boolean glutenFree;
@@ -23,7 +22,6 @@ public class ExtendedRecipeDTO {
     private int aggregateLikes;
     private int healthScore;
     private String creditsText;
-    private String license;
     private String sourceName;
     private double pricePerServing;
     private List<ExtendedIngredientDTO> extendedIngredients;
@@ -40,6 +38,10 @@ public class ExtendedRecipeDTO {
     private List<String> diets;
     private List<String> occasions;
     private String instructions;
-    private List<Object> analyzedInstructions; // If further details about instructions are known, replace `Object` with another DTO.
-    private Double spoonacularScore;
+    private List<InstructionDTO> analyzedInstructions;
+    private Object originalId;
+    private double spoonacularScore;
+    private String spoonacularSourceUrl;
+
+    // Getters and Setters
 }

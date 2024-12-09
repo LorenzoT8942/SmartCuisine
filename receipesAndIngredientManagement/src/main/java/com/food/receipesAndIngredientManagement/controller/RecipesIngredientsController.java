@@ -3,6 +3,7 @@ package com.food.receipesAndIngredientManagement.controller;
 
 import java.util.List;
 
+import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipeInformationResponse.RecipeInfoResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,12 +38,11 @@ public class RecipesIngredientsController {
     }
 
     // Find an ingredient by ID
-    @GetMapping("/ingredients/{id}")
-    public ResponseEntity<IngredientDTO> getIngredientById(@PathVariable Long id) {
+    @GetMapping("/ingredients/search-by-id/{id}")
+    public ResponseEntity<IngredientDTO> searchIngredientById(@PathVariable Long id) {
         IngredientDTO ingredient = ingredientService.findById(id);
         return ResponseEntity.ok(ingredient);
     }
-
 
     // Search for a recipe by name
     @GetMapping("/recipes/search-by-name")
@@ -51,20 +51,18 @@ public class RecipesIngredientsController {
         return ResponseEntity.ok(recipes);
     }
 
-    // Find a recipe by ID
-    @GetMapping("/recipes/{id}")
-    public ResponseEntity<SearchRecipeRequestDTO> getRecipeById(@PathVariable Long id) {
-        SearchRecipeRequestDTO recipe = recipeService.findById(id);
+    @GetMapping("recipes/info/{id}")
+    public ResponseEntity<RecipeInfoResponseDTO> searchRecipeInfo(@PathVariable Long id) {
+        RecipeInfoResponseDTO recipe = recipeService.searchRecipeInfo(id);
         return ResponseEntity.ok(recipe);
     }
 
-    /*
+/*
     // Search for recipes containing an ingredient
     @GetMapping("/recipes/search-by-ingredient")
     public ResponseEntity<List<SearchRecipeRequestDTO>> searchRecipesByIngredient(@RequestParam String ingredientName) {
         List<SearchRecipeRequestDTO> recipes = recipeService.searchByIngredientName(ingredientName);
         return ResponseEntity.ok(recipes);
     }
-
-     */
+*/
 }
