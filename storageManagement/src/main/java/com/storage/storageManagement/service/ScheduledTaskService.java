@@ -1,9 +1,10 @@
 package com.storage.storageManagement.service;
 
-import com.storage.storageManagement.dtos.request.NotificationRequestDto;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.storage.storageManagement.model.StorageList;
-import com.storage.storageManagement.repository.StorageListRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.storage.storageManagement.dtos.request.NotificationRequestDto;
+import com.storage.storageManagement.dtos.response.NotificationResponseDto;
+import com.storage.storageManagement.model.StorageList;
+import com.storage.storageManagement.repository.StorageListRepository;
 
 @Service
 public class ScheduledTaskService {
@@ -61,7 +62,6 @@ public class ScheduledTaskService {
 
                     // Send notification to the Notification Service
 
-
                     HttpHeaders headers = new HttpHeaders();
                     headers.set("Content-Type", "application/json");
                     headers.set("Authorization", apiKeyNotification);
@@ -73,7 +73,17 @@ public class ScheduledTaskService {
                     HttpEntity<Object> requestEntity = new HttpEntity<>(requestPayload, headers);
 
                     // Make the POST request
-                    restTemplate.exchange(notificationURL, HttpMethod.POST, requestEntity, String.class);
+                    ResponseEntity<NotificationResponseDto> dtoRes = restTemplate.exchange(notificationURL, HttpMethod.POST, requestEntity, NotificationResponseDto.class);
+                    System.out.println("notification dto response");
+                    System.out.println(dtoRes);
+                
+                    // Handle the response
+                    if (dtoRes.getStatusCode().is2xxSuccessful()) {
+                        System.out.println("Notification sent successfully!");
+                    } else {
+                        System.out.println("Failed to send notification: " + dtoRes.getStatusCode());
+                    }
+
 
                     logger.info("Notification sent for product {} belonging to user {}.",
                             product.getId().getIngredientId(), product.getId().getUsername());
