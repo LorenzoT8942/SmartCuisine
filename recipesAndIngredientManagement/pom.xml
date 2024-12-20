@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.food</groupId>
-	<artifactId>receipesAndIngredientManagement</artifactId>
+	<artifactId>recipesAndIngredientManagement</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>receipesAndIngredientManagement</name>
 	<description>project for connecting the api spoonacular</description>

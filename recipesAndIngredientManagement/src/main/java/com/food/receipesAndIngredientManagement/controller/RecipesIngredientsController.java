@@ -56,4 +56,12 @@ public class RecipesIngredientsController {
         RecipeInfoResponseDTO recipe = recipeService.searchRecipeInfo(id);
         return ResponseEntity.ok(recipe);
     }
+
+    @GetMapping("recipes/favorites/add/{id}/{username}")
+    public boolean addRecipeToFavorites(@PathVariable Long id, @PathVariable String username){
+
+        //TODO: implementare aggiunta entry nel db
+
+        return false;
+    }
 }
