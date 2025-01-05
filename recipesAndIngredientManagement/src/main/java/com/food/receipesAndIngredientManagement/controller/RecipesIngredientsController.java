@@ -4,6 +4,7 @@ package com.food.receipesAndIngredientManagement.controller;
 import java.util.List;
 
 import com.food.receipesAndIngredientManagement.dtos.responses.searchIngredientInfo.IngredientInfoDTO;
+import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipeInformationResponse.NutritionalInfoDTO;
 import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipeInformationResponse.RecipeInfoResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,7 @@ public class RecipesIngredientsController {
     // Search for a recipe by name
     @GetMapping("/recipes/search-by-name")
     public ResponseEntity<List<RecipeResultDTO>> searchRecipeByName(@RequestParam String name) {
+        
         List<RecipeResultDTO> recipes = recipeService.searchRecipeByName(name);
         return ResponseEntity.ok(recipes);
     }
@@ -56,6 +58,14 @@ public class RecipesIngredientsController {
         RecipeInfoResponseDTO recipe = recipeService.searchRecipeInfo(id);
         return ResponseEntity.ok(recipe);
     }
+    
+/* 
+    @GetMapping("recipes/nutritonal-info/{id}")
+    public ResponseEntity<NutritionalInfoDTO> searchRecipeNutritionalInfo(@PathVariable Long id) {
+        NutritionalInfoDTO recipe = recipeService.searchRecipeNutritionalInfo(id);
+        return ResponseEntity.ok(recipe);
+    }
+*/
 
     @GetMapping("recipes/favorites/add/{id}/{username}")
     public boolean addRecipeToFavorites(@PathVariable Long id, @PathVariable String username){

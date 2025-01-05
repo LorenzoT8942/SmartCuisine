@@ -1,6 +1,6 @@
 import React from "react";
-import RecipeCard from "./RecipeCard";
-import "./RecipeList.css"; // Per gli stili del layout
+import RecipeCard from "./RecipeCard.tsx";
+import "../CSS/RecipeList.css"; // Per gli stili del layout
 
 const RecipeList = ({ recipes }) => {
   return (
@@ -8,8 +8,8 @@ const RecipeList = ({ recipes }) => {
       {recipes.map((recipe, index) => (
         <RecipeCard
           key={index}
+          id = {recipe.id}
           title={recipe.title}
-          description={recipe.description}
           imageUrl={recipe.imageUrl}
         />
       ))}

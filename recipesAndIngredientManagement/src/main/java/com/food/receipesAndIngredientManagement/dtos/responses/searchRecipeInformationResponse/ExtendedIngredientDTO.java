@@ -17,6 +17,5 @@ public class ExtendedIngredientDTO {
     private String unit;
     private List<String> meta;
     private MeasuresDTO measures;
-
     // Getters and Setters
 }

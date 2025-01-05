@@ -1,0 +1,60 @@
+.recipe-details {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .recipe-details__title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .recipe-details__image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  .recipe-details__info h2 {
+    font-size: 1.5rem;
+    margin-top: 20px;
+    color: #333;
+  }
+  
+  .recipe-details__info p,
+  .recipe-details__info ul {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+  }
+  
+  .recipe-details__info ul {
+    list-style: disc;
+    padding-left: 20px;
+  }
+  
+  .recipe-details__info ul li {
+    margin-bottom: 10px;
+  }
+
+  .recipe-info-wrapper {
+    display: flex;
+    justify-content: center;
+    border-radius: 20px;
+    padding-top: 20px; /* Space from the start of the page */
+    margin-top: 10px; /* Space from the top of the page */
+  }
+  
+  .recipe-details {
+    background-color: white;
+    width: 75%;
+    margin-top: 10px;
+    margin-bottom: 50px;
+    border-radius: 20px;
+    padding: 20px; /* Optional: Add some padding inside the div */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow for better visibility */
+  }
+  

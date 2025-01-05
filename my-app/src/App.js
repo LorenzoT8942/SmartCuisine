@@ -4,27 +4,18 @@ import './CSS/home-shopping-list.css'
 import {useEffect} from "react";
 import UserProfileComp from './components/UserProfile.tsx'
 import { BrowserRouter as Router, Route, Routes  } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import Login from './components/Login.tsx';
 import SignUp from './components/SignUp.tsx';
 import SearchBar from './components/SearchBar.tsx'
-
-/*
-const generateIngredientCards = (ingredients) => {
-    return ingredients.map((ingredient, index) => (
-        <IngredientCard
-            key={index}
-            name={ingredient.name}
-            quantity={ingredient.quantity}
-        />
-    ));
-};
-*/
+import SearchRecipeResults from './components/SearchRecipesResults.tsx'
+import RecipeInfoPage from './components/RecipeInfoPage/RecipeInfoPage.tsx'
 
 function App() {
 
     useEffect(() => {
         // Set background color when the component mounts
-        document.body.style.backgroundColor = '#32cd32';
+        document.body.style.backgroundColor = '#88c265';
         // If you want an image as background:
         // document.body.style.backgroundImage = "url('path/to/your-image.jpg')";
         // document.body.style.backgroundSize = 'cover';
@@ -37,11 +28,16 @@ function App() {
           <Routes>
             {/* Route for HomePage */}
             <Route path="/" element={<HomePage />} />
-            <Route path="/results" element{<SearchRecipeResults />} />
+
+            {/* Routes for recipes search */}
+            <Route path="/results" element={<SearchRecipeResults />} />
+            {/* Route for RecipeInfoPage */}
+            <Route path="/recipes/info/:recipeId" element={<RecipeInfoPage />} />
             {/* Route for UserProfileWithNotifications */}
             <Route path="/profile" element={<UserProfileComp />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
+            <Route render={() => <h1>Page not found</h1>} />
           </Routes>
         </Router>
       );
@@ -54,6 +50,35 @@ function HomePage() {
     let logoutButton;
     let signUpButton;
     let profileButton;
+
+    const navigate = useNavigate();
+
+    const handleSearch = (query) => {
+        navigate(`/results?query=${encodeURIComponent(query)}`);
+    }
+
+    const handleProfile = () => {
+
+        window.location.href = '/profile';
+
+    };
+    const handleSignUp = () => {
+
+        window.location.href = '/signup';
+
+    };
+
+    const handleLogin = () => {
+
+        window.location.href = '/login';
+
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('authToken'); // Clear the auth token from localStorage
+        alert('Logged out successfully!');
+        window.location.reload();
+      };
 
     if (isLoggedIn) {
         logoutButton = (
@@ -87,34 +112,7 @@ function HomePage() {
         borderRadius: '8px',
     };
 
-    const navigate = useNavigate();
-
-    const handleSearch (query) => {
-        navigate(`/results?query=${encodeURIComponent(query)}`);
-    }
-
-    const handleProfile = () => {
-
-        window.location.href = '/profile';
-
-    };
-    const handleSignUp = () => {
-
-        window.location.href = '/signup';
-
-    };
-
-    const handleLogin = () => {
-
-        window.location.href = '/login';
-
-    };
-
-    const handleLogout = () => {
-        localStorage.removeItem('authToken'); // Clear the auth token from localStorage
-        alert('Logged out successfully!');
-        window.location.reload();
-      };
+    
 
     return (
         <div style={containerStyles}>

@@ -32,6 +32,7 @@ public class userProfileController {
 
     @PostMapping("/create")
     public ResponseEntity<Object> createProfile(@RequestBody userProfileRequestDto userProfileRequestDto) {
+        System.out.println("me so rotto il cazzo :)\n\n");
         try {
             userProfileResponseDto createdProfile = userPServ.createUserProfile(userProfileRequestDto);
             return new ResponseEntity<>(createdProfile, HttpStatus.CREATED);
@@ -42,6 +43,7 @@ public class userProfileController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody loginDto loginDto) {
+        System.out.println("sono nel controller, helo\n\n");
          return userPServ.login(loginDto);
     }
 

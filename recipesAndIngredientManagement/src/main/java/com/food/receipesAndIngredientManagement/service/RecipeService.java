@@ -1,7 +1,9 @@
 package com.food.receipesAndIngredientManagement.service;
 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.food.receipesAndIngredientManagement.dtos.responses.SearchRecipeRequestDTO;
+import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipeInformationResponse.NutritionalInfoDTO;
 import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipeInformationResponse.RecipeInfoResponseDTO;
 import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipesByNameResponse.RecipeResultDTO;
 import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipesByNameResponse.SearchRecipeByNameResponseDTO;
@@ -37,7 +39,6 @@ public class RecipeService {
             // Build the HttpRequest
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
-                    .header("Authorization", "Bearer " + API_KEY)
                     .GET()
                     .build();
 
@@ -67,7 +68,6 @@ public class RecipeService {
         RecipeInfoResponseDTO recipeInfo = new RecipeInfoResponseDTO();
 
         String url = "https://api.spoonacular.com/recipes/"+ id +"/information?includeNutrition=false&includeWinePairing=false&addTasteData=false&apiKey=" + API_KEY;
-        System.out.println(url);
 
         // Create an HttpClient
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -95,6 +95,36 @@ public class RecipeService {
                 System.out.println("An error occurred: " + e.getMessage());
             }
         }
+
+        String nutrtionalInfoURL = "https://api.spoonacular.com/recipes/" + id + "/nutritionWidget.json?apiKey=" + API_KEY;
+        NutritionalInfoDTO recipeNutritionalInfo = new NutritionalInfoDTO();
+
+        try (HttpClient client = HttpClient.newHttpClient()) {
+
+            // Build the HttpRequest
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(nutrtionalInfoURL))
+                    .GET()
+                    .build();
+
+            try {
+                // Send the request and get the response
+                HttpResponse<String> jsonResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                recipeNutritionalInfo = objectMapper.readValue(jsonResponse.body(), NutritionalInfoDTO.class);
+                // System.out.println(recipeNutritionalInfo.getCalories());
+                // System.out.println(recipeNutritionalInfo.getFat());
+                // System.out.println(recipeNutritionalInfo.getCarbs());
+                // System.out.println(recipeNutritionalInfo.getProtein());
+                recipeInfo.setNutrition(recipeNutritionalInfo);
+
+            } catch (Exception e) {
+                // Handle exceptions
+                System.out.println("An error occurred: " + e.getMessage());
+            }
+        }
+
         return recipeInfo;
     }
 }

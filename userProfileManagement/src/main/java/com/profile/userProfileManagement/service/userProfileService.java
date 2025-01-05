@@ -73,12 +73,11 @@ public class userProfileService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists " + dto.getEmail());
         }
         u = userPRepo.save(u);
-
         return objectMapper.convertValue(u, userProfileResponseDto.class);
     }
 
     public ResponseEntity<Object> login(loginDto dto){
-
+        System.out.println("sono nella classe service, helo\n\n");
         Optional<UserProfile> up = userPRepo.findOneByUsername(dto.getUsername());
 
         //Optional<userProfile> up = userPRepo.findByUsernameAndHashPassword(dto.getUsername(), hashPassword(dto.getPassword()));
@@ -101,7 +100,7 @@ public class userProfileService {
         ResponseEntity<JWTResponse> jwt = restTemplate.exchange(getTokenUrl, HttpMethod.POST, requestEntity, JWTResponse.class);
 
         if (jwt.getStatusCode().isError() || !jwt.hasBody() || jwt.getBody().getJwtToken() == null) return new ResponseEntity<>("error in generating the jwt token", HttpStatus.UNAUTHORIZED);
-
+        System.out.println("sono nel service, ho finito\n\n");
         return new ResponseEntity<>(jwt.getBody(), HttpStatus.OK);
     }
 

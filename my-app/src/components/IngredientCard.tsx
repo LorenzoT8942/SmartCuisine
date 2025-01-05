@@ -1,3 +1,5 @@
+import React from "react";
+
 const IngredientCard = ({ name, quantity }) => {
     const cardStyles = {
         display: 'flex',
