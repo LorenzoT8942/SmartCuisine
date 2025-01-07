@@ -1,4 +1,4 @@
-package com.shoppingList.shoppingListManagement.dtos.response;
+package com.storage.storageManagement.dtos.response;
 
 import java.util.Map;
 

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.storage.storageManagement.dtos.request.AddIngredientRequestDTO;
@@ -53,15 +52,15 @@ public class StorageListController {
         return storageListService.addIngredientToStorage(addIngredientRequest);
     }
 
-    @DeleteMapping("/deleteIngredient/{id}")
-    public ResponseEntity<String> deleteIngredient(@RequestParam Long ingredientId){
+    @DeleteMapping("/deleteIngredient/{ingredientId}")
+    public ResponseEntity<String> deleteIngredient(@PathVariable Long ingredientId){
         return storageListService.deleteIngredientToStorage(ingredientId);
 
     }
 
 
-    @PostMapping("/move-ingredients/{shopping_list_id}")
-    public ResponseEntity<String> moveIngredients(@RequestParam String shListId, HttpServletRequest request) { 
+    @PostMapping("/move-ingredients/{shListId}")
+    public ResponseEntity<String> moveIngredients(@PathVariable String shListId, HttpServletRequest request) { 
         
         return storageListService.moveIngredientsToStorage(shListId, extractJWTTokenFromRequest(request));       
     }

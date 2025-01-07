@@ -1,5 +1,13 @@
 package com.shoppingList.shoppingListManagement.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
 import com.shoppingList.shoppingListManagement.dtos.IngredientDTO;
 import com.shoppingList.shoppingListManagement.dtos.request.AddIngredientRequestDTO;
 import com.shoppingList.shoppingListManagement.dtos.request.ShoppingListRequestDTO;
@@ -8,11 +16,7 @@ import com.shoppingList.shoppingListManagement.dtos.response.ShoppingListRespons
 import com.shoppingList.shoppingListManagement.model.ShoppingList;
 import com.shoppingList.shoppingListManagement.model.ShoppingListID;
 import com.shoppingList.shoppingListManagement.repository.ShoppingListRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import com.shoppingList.shoppingListManagement.utilities.JWTContext;
 
 @Service
 public class ShoppingListService {
@@ -125,6 +129,7 @@ public class ShoppingListService {
         ShoppingListResponseDTO dto = new ShoppingListResponseDTO();
         dto.setUsername(shoppingList.getId().getUsername());
         dto.setName(shoppingList.getId().getShoppingListName());
+        dto.setIngredients(shoppingList.getIngredients());
         return dto;
     }
 
@@ -135,5 +140,21 @@ public class ShoppingListService {
         responseDTO.setShoppingListName(shoppingList.getId().getShoppingListName());
         responseDTO.setIngredients(shoppingList.getIngredients());
         return responseDTO;
+    }
+
+    public ResponseEntity<Object> deleteIngredientToShoppingList(String shopping_list, Long ingredient_id) {
+        String username = JWTContext.get();
+        if(username == null) return new ResponseEntity<>("Log in for doing the operation", HttpStatus.FORBIDDEN);
+        if(shopping_list == null) return new ResponseEntity<>("Insert a valid shopping list name", HttpStatus.BAD_REQUEST);
+
+        ShoppingListID id = new ShoppingListID();
+        id.setShoppingListName(shopping_list);
+        id.setUsername(username);
+
+        ShoppingList listObj = shoppingListRepository.getReferenceById(id);
+        listObj.removeIngredient(ingredient_id);
+        listObj = shoppingListRepository.save(listObj);
+    
+        return new ResponseEntity<>(this.convertToResponseDTO(listObj), HttpStatus.OK);
     }
 }

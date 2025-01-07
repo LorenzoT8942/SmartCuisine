@@ -5,16 +5,22 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.storage.storageManagement.dtos.request.AddIngredientRequestDTO;
+import com.storage.storageManagement.dtos.response.ShoppingListResponseDTO;
 import com.storage.storageManagement.dtos.response.StorageListResponseDTO;
 import com.storage.storageManagement.model.StorageList;
 import com.storage.storageManagement.model.StorageListID;
@@ -29,6 +35,9 @@ public class StorageListService {
 
     @Value("${external.api.shoppingList_service}")
     private String shoppingListUrl;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     // Formatter per la data di scadenza nel formato MM/DD/YYYY
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -120,7 +129,34 @@ public class StorageListService {
 
     public ResponseEntity<String> moveIngredientsToStorage(String shListId, String token) {
         if(token == null) return ResponseEntity.badRequest().body("JWT Token is missing or invalid");
-        shoppingListUrl
-        throw new UnsupportedOperationException("Not supported yet.");
+        String username = JWTContext.get();
+        if(username == null) return new ResponseEntity<>("Log in for doing the operation", HttpStatus.FORBIDDEN);
+        //shoppingListUrl
+         HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        headers.set("Authorization", "Bearer " + token);
+
+        HttpEntity<Object> requestEntity = new HttpEntity<>(null, headers);
+
+        // Make the GET request
+        ResponseEntity<ShoppingListResponseDTO> shListIngrs = restTemplate.exchange(shoppingListUrl + "/shopping-lists/"+shListId, HttpMethod.GET, requestEntity, ShoppingListResponseDTO.class);
+
+        if (shListIngrs.getStatusCode().isError() || !shListIngrs.hasBody()) return new ResponseEntity<>("error in generating retrieving shopping list ingredients", HttpStatus.UNAUTHORIZED);
+        
+        Map<Long, Float> ings = shListIngrs.getBody().getIngredients();
+        AddIngredientRequestDTO dto = new AddIngredientRequestDTO();
+
+        dto.setExpirationDate(LocalDate.now().plusMonths(1));
+        dto.setUsername(username);
+
+        for (Map.Entry<Long, Float> ing : ings.entrySet()) {
+            Long ingId = ing.getKey();   // Access the key (ingredient ID)
+            Float quantity = ing.getValue();
+            dto.setIngredientId(ingId);
+            dto.setQuantity(quantity);
+            this.addIngredientToStorage(dto);
+        }
+
+        return new ResponseEntity<>("Ingredients moved succesfully", HttpStatus.OK);
     }
 }

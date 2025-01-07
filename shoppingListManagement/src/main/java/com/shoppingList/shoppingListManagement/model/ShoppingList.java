@@ -1,15 +1,17 @@
 package com.shoppingList.shoppingListManagement.model;
 
-import jakarta.persistence.*;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,4 +28,8 @@ public class ShoppingList implements Serializable {
     private Map<Long, Float> ingredients = new HashMap<>();
 
     public void addIngredient(Long id, Float quantity) {this.ingredients.put(id, quantity);}
+
+    public void removeIngredient(Long id) {
+        if(this.ingredients.containsKey(id)) this.ingredients.remove(id);
+    }
 }

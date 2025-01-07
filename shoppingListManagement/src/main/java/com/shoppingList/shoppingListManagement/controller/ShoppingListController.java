@@ -3,6 +3,7 @@ package com.shoppingList.shoppingListManagement.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -74,5 +75,10 @@ public class ShoppingListController {
     @PostMapping("/add-ingredient")
     public AddIngredientResponseDTO addIngredientToShoppingList(@RequestBody AddIngredientRequestDTO addIngredientRequestDTO) {
         return shoppingListService.addIngredientToShoppingList(addIngredientRequestDTO);
+    }
+
+    @DeleteMapping("/{shopping_list}/delete-ingredient/{ingredient_id}")
+    public ResponseEntity<Object> deleteIngredientToShoppingList(@PathVariable String shopping_list, @PathVariable Long ingredient_id) {
+        return shoppingListService.deleteIngredientToShoppingList(shopping_list, ingredient_id);
     }
 }
