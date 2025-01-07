@@ -1,13 +1,25 @@
 package com.storage.storageManagement.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.storage.storageManagement.dtos.request.AddIngredientRequestDTO;
 import com.storage.storageManagement.dtos.response.StorageListResponseDTO;
 import com.storage.storageManagement.service.StorageListService;
 import com.storage.storageManagement.utilities.JWTContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/storage")
@@ -25,7 +37,7 @@ public class StorageListController {
     @GetMapping("/{username}")
     public List<StorageListResponseDTO> getStorageByUsername(@PathVariable String username) {
         if (!JWTContext.get().equals(username)) {
-            throw new CustomUnauthorizedException("User is not authorized to access this resource");
+            throw new RuntimeException("User is not authorized to access this resource");
         }
         return storageListService.getStorageByUsername(username);
     }
@@ -41,11 +53,33 @@ public class StorageListController {
         return storageListService.addIngredientToStorage(addIngredientRequest);
     }
 
-    public static class CustomUnauthorizedException extends RuntimeException {
-        public CustomUnauthorizedException(String message) {
-            super(message);
+    @DeleteMapping("/deleteIngredient/{id}")
+    public ResponseEntity<String> deleteIngredient(@RequestParam Long ingredientId){
+        return storageListService.deleteIngredientToStorage(ingredientId);
+
+    }
+
+
+    @PostMapping("/move-ingredients/{shopping_list_id}")
+    public ResponseEntity<String> moveIngredients(@RequestParam String shListId, HttpServletRequest request) { 
+        
+        return storageListService.moveIngredientsToStorage(shListId, extractJWTTokenFromRequest(request));       
+    }
+
+
+    private String extractJWTTokenFromRequest(HttpServletRequest request){
+        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            // Extract the JWT token
+            String jwtToken = authorizationHeader.substring(7);
+            return jwtToken;
+        } else {
+            return null;
         }
     }
+    
+
 }
 
 

@@ -1,16 +1,22 @@
 package com.shoppingList.shoppingListManagement.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.shoppingList.shoppingListManagement.dtos.request.AddIngredientRequestDTO;
-import com.shoppingList.shoppingListManagement.dtos.request.IngredientRequestDTO;
 import com.shoppingList.shoppingListManagement.dtos.request.ShoppingListRequestDTO;
 import com.shoppingList.shoppingListManagement.dtos.response.AddIngredientResponseDTO;
 import com.shoppingList.shoppingListManagement.dtos.response.ShoppingListResponseDTO;
 import com.shoppingList.shoppingListManagement.service.ShoppingListService;
 import com.shoppingList.shoppingListManagement.utilities.JWTContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/shopping-lists")

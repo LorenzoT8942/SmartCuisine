@@ -77,10 +77,8 @@ public class userProfileService {
     }
 
     public ResponseEntity<Object> login(loginDto dto){
-        System.out.println("sono nella classe service, helo\n\n");
         Optional<UserProfile> up = userPRepo.findOneByUsername(dto.getUsername());
 
-        //Optional<userProfile> up = userPRepo.findByUsernameAndHashPassword(dto.getUsername(), hashPassword(dto.getPassword()));
         if (up.isEmpty()) return new ResponseEntity<>("username not present", HttpStatus.NOT_FOUND);
         if(!verifyPassword(dto.getPassword(), up.get().getHashPassword())) return new ResponseEntity<>("the password is wrong", HttpStatus.FORBIDDEN);
 

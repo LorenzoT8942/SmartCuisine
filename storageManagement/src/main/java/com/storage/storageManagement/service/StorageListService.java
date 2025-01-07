@@ -1,13 +1,5 @@
 package com.storage.storageManagement.service;
 
-import com.storage.storageManagement.dtos.request.AddIngredientRequestDTO;
-import com.storage.storageManagement.dtos.response.StorageListResponseDTO;
-import com.storage.storageManagement.model.StorageList;
-import com.storage.storageManagement.model.StorageListID;
-import com.storage.storageManagement.repository.StorageListRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -16,11 +8,27 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.storage.storageManagement.dtos.request.AddIngredientRequestDTO;
+import com.storage.storageManagement.dtos.response.StorageListResponseDTO;
+import com.storage.storageManagement.model.StorageList;
+import com.storage.storageManagement.model.StorageListID;
+import com.storage.storageManagement.repository.StorageListRepository;
+import com.storage.storageManagement.utilities.JWTContext;
+
 @Service
 public class StorageListService {
 
     @Autowired
     private StorageListRepository storageListRepository;
+
+    @Value("${external.api.shoppingList_service}")
+    private String shoppingListUrl;
 
     // Formatter per la data di scadenza nel formato MM/DD/YYYY
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -99,5 +107,20 @@ public class StorageListService {
         responseDTO.setQuantity(storageList.getQuantity());
         responseDTO.setExpirationDate(storageList.getExpiryDate());
         return responseDTO;
+    }
+
+
+    public ResponseEntity<String> deleteIngredientToStorage(Long ingredientId) {
+        String username = JWTContext.get();
+        if(username == null) return new ResponseEntity<>("Log in for doing the operation", HttpStatus.FORBIDDEN);
+        StorageListID id = new StorageListID(username, ingredientId);
+        storageListRepository.deleteById(id);
+        return new ResponseEntity<>("Ingredient deleted succefully", HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> moveIngredientsToStorage(String shListId, String token) {
+        if(token == null) return ResponseEntity.badRequest().body("JWT Token is missing or invalid");
+        shoppingListUrl
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
