@@ -1,0 +1,17 @@
+/* Card singola della shopping list */
+.shopping-list-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+  }
+
+  /* Nome della shopping list */
+.shopping-list-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }

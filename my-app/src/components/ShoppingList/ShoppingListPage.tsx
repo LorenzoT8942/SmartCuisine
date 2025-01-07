@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaTrash, FaPlus } from "react-icons/fa";
 import axios from "axios";
 import "../../CSS/shopping-list-page.css"; //Import del file CSS
@@ -20,12 +21,17 @@ const ShoppingListPage = () => {
         unit: String;
     }
 
+    interface ShoppingListRequestDTO{
+      name: String; 
+    }
+
     const [shoppingLists, setShoppingLists] = useState<Array<ShoppingList>>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newListName, setNewListName] = useState('');
     const token = localStorage.getItem('authToken');
+    const navigate = useNavigate();
 
     const fetchShoppingLists = async () => {
         if(token == null) throw new Error("the token is null");
@@ -61,8 +67,32 @@ const ShoppingListPage = () => {
       setIsModalOpen(true);
   };
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
       // Handle the creation of the new list
+      if(token == null) throw new Error("the token is null");
+        const parsedData = JSON.parse(token);
+        const tokenParsed = parsedData.token;
+
+        const newShoppingList: ShoppingListRequestDTO = {
+          name: newListName
+      };
+
+        try {
+            setLoading(true);
+            const response = await axios.post("http://localhost:3002/shopping-lists/create", newShoppingList, {
+                headers: {
+                    Authorization: `Bearer ${tokenParsed}`,
+                    'Content-Type': 'application/json'
+                }
+            }
+          );
+        } catch (err) {
+          setError(err.message);
+      } finally {
+          setLoading(false);
+          fetchShoppingLists();
+      }
+      
       setIsModalOpen(false);
       setNewListName('');
   };
@@ -71,6 +101,10 @@ const ShoppingListPage = () => {
       setIsModalOpen(false);
       setNewListName('');
   };
+
+  const handleCardClick = (id: number) => {
+    navigate(`/shopping-list/${id}`);
+};
 
   useEffect(() => {
       fetchShoppingLists();
@@ -85,7 +119,9 @@ const ShoppingListPage = () => {
           <div className="shopping-lists-container">
               {shoppingLists.length > 0 ? (
                   shoppingLists.map((list) => (
-                      <ShoppingListCard key={list.id} list={list} onDelete={handleDelete} />
+                        <div key={list.id} onClick={() => handleCardClick(list.id)}>
+                            <ShoppingListCard list={list} onDelete={handleDelete} />
+                        </div>                 
                   ))
               ) : (
                   <div className="no-shopping-lists">No shopping lists found.</div>

@@ -54,7 +54,7 @@ public class ShoppingListController {
      * @param shoppingListRequestDTO The data for creating a new shopping list
      * @return ShoppingListResponseDTO
      */
-    @PostMapping
+    @PostMapping("/create")
     public ShoppingListResponseDTO createShoppingList(@RequestBody ShoppingListRequestDTO shoppingListRequestDTO) {
         String username = JWTContext.get();
         return shoppingListService.createShoppingList(username, shoppingListRequestDTO);
