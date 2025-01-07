@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.profile.userProfileManagement.dtos.requests.loginDto;
 import com.profile.userProfileManagement.dtos.requests.userProfileRequestDto;
 import com.profile.userProfileManagement.dtos.requests.userProfileUpdateDto;
+import com.profile.userProfileManagement.dtos.responses.FavoriteRecipesResponseDTO;
 import com.profile.userProfileManagement.dtos.responses.userProfileResponseDto;
 import com.profile.userProfileManagement.service.userProfileService;
 import com.profile.userProfileManagement.utilities.JWTContext;
@@ -70,4 +71,21 @@ public class userProfileController {
         return userPServ.updateprofile(username, entity);
     }
 
+        @GetMapping("/profile/{username}/favorites")
+    public ResponseEntity<FavoriteRecipesResponseDTO> getFavorites(@PathVariable String username) {
+        username = JWTContext.get();
+        return userPServ.getFavorites(username);
+    }
+
+    @PostMapping("/profile/{username}/favorites/{recipeId}")
+    public ResponseEntity<FavoriteRecipesResponseDTO> addFavorite(@PathVariable String username, @PathVariable Long recipeId) {
+        username = JWTContext.get();
+        return userPServ.addFavorite(username, recipeId);
+    }
+
+    @DeleteMapping("/profile/{username}/favorites/{recipeId}")
+    public ResponseEntity<String> deleteFavorite(@PathVariable String username, @PathVariable Long recipeId) {
+        username = JWTContext.get();
+        return userPServ.deleteFavorite(username, recipeId);
+    }
 }

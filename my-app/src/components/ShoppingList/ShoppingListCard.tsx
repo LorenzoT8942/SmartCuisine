@@ -1,6 +1,6 @@
 import React from "react";
 import { FaTrash } from "react-icons/fa";
-import "../ShoppingLists.css";
+import "../../CSS/shopping-list-card.css";
 
 const ShoppingListCard = ({ list, onDelete }) => {
   return (

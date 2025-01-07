@@ -23,6 +23,8 @@ const ShoppingListPage = () => {
     const [shoppingLists, setShoppingLists] = useState<Array<ShoppingList>>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newListName, setNewListName] = useState('');
     const token = localStorage.getItem('authToken');
 
     const fetchShoppingLists = async () => {
@@ -45,37 +47,68 @@ const ShoppingListPage = () => {
         }
     };
 
-    const handleDelete = async (id) => {
-        //TODO: Implementare la cancellazione di una lista della spesa
-    };
-
-    const onCreate = () => {
-
-    };
-
     useEffect(() => {
         fetchShoppingLists();
         console.log(shoppingLists);
     }, []);
 
 
-    return (
-        <div className="shopping-list-page-wrapper">
-        <button className="create-button" onClick={onCreate}>
-        <FaPlus /> Create New List
-      </button>
-        <div className="shopping-lists-container">
-          {shoppingLists.length > 0 ? (
-            shoppingLists.map((list) => (
-              <ShoppingListCard key={list.id} list={list} onDelete={handleDelete} />
-            ))
-          ) : (
-            <div className="no-shopping-lists">No shopping lists found.</div>
+    const handleDelete = async (id) => {
+      //TODO: Implementare la cancellazione di una lista della spesa
+  };
+
+  const onCreate = () => {
+      setIsModalOpen(true);
+  };
+
+  const handleCreate = () => {
+      // Handle the creation of the new list
+      setIsModalOpen(false);
+      setNewListName('');
+  };
+
+  const handleCancel = () => {
+      setIsModalOpen(false);
+      setNewListName('');
+  };
+
+  useEffect(() => {
+      fetchShoppingLists();
+      console.log(shoppingLists);
+  }, []);
+
+  return (
+      <div className="shopping-list-page-wrapper">
+          <button className="create-button" onClick={onCreate}>
+              <FaPlus /> Create New List
+          </button>
+          <div className="shopping-lists-container">
+              {shoppingLists.length > 0 ? (
+                  shoppingLists.map((list) => (
+                      <ShoppingListCard key={list.id} list={list} onDelete={handleDelete} />
+                  ))
+              ) : (
+                  <div className="no-shopping-lists">No shopping lists found.</div>
+              )}
+          </div>
+
+          {isModalOpen && (
+              <div className="modal">
+                  <div className="modal-content">
+                      <h2>Create New Shopping List</h2>
+                      <input
+                          type="text"
+                          value={newListName}
+                          onChange={(e) => setNewListName(e.target.value)}
+                          placeholder="Enter list name"
+                      />
+                      <button onClick={handleCreate}>Create</button>
+                      <button onClick={handleCancel}>Cancel</button>
+                  </div>
+              </div>
           )}
-        </div>
-        
       </div>
-    );
+  );
 };
 
 export default ShoppingListPage;
