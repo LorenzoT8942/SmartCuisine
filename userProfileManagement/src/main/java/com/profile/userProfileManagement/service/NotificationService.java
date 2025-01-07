@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.profile.userProfileManagement.dtos.requests.rabbitMQNotificationDto;
 import com.profile.userProfileManagement.model.Notification;
 import com.profile.userProfileManagement.model.UserProfile;
@@ -37,7 +36,6 @@ public class NotificationService {
         n.setContent(not.getContent());
         n.setNotificationId(not.getNotificationId());
         n.setUserProfile(user.get());
-
         notRepo.saveAndLinkNotification(n);
     }
 

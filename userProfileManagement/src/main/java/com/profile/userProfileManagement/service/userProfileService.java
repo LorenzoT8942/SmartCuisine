@@ -3,9 +3,9 @@ package com.profile.userProfileManagement.service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,9 +20,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.profile.userProfileManagement.dtos.requests.loginDto;
 import com.profile.userProfileManagement.dtos.requests.userProfileRequestDto;
 import com.profile.userProfileManagement.dtos.requests.userProfileUpdateDto;
+import com.profile.userProfileManagement.dtos.responses.FavoriteRecipesResponseDTO;
 import com.profile.userProfileManagement.dtos.responses.JWTResponse;
 import com.profile.userProfileManagement.dtos.responses.userProfileResponseDto;
+import com.profile.userProfileManagement.model.FavoriteRecipe;
 import com.profile.userProfileManagement.model.UserProfile;
+import com.profile.userProfileManagement.repository.FavoriteRecipesRepository;
 import com.profile.userProfileManagement.repository.userProfileRepository;
 import com.profile.userProfileManagement.utilities.JWTContext;
 
@@ -31,6 +34,9 @@ public class userProfileService {
 
     @Autowired
     private userProfileRepository userPRepo;
+
+    @Autowired
+    private FavoriteRecipesRepository favRepo;
 
     @Value("${external.api.auth_service.token}")
     private String getTokenUrl;
@@ -102,7 +108,6 @@ public class userProfileService {
         return new ResponseEntity<>(jwt.getBody(), HttpStatus.OK);
     }
 
-
     public userProfileResponseDto getprofile(String username){
         Optional<UserProfile> up = userPRepo.findOneByUsername(username);
         if (up.isEmpty()) return null;
@@ -135,7 +140,35 @@ public class userProfileService {
         return new ResponseEntity<>(objectMapper.convertValue(up, userProfileResponseDto.class), HttpStatus.OK);
     }
 
+    
+    public ResponseEntity<FavoriteRecipesResponseDTO> getFavorites(String username) {
+        //TODO: check if queries return valid results
+        UserProfile up = userPRepo.findOneByUsername(username).get();
+        FavoriteRecipesResponseDTO response = new FavoriteRecipesResponseDTO();
+        response.setRecipeIds(favRepo.findAllByUserProfile(up));
+        return new ResponseEntity<>(response , HttpStatus.OK);
+    }
 
+    public ResponseEntity<FavoriteRecipesResponseDTO> addFavorite(String username, Long recipeId) {
+        //TODO: check if queries return valid results
+        FavoriteRecipesResponseDTO response = new FavoriteRecipesResponseDTO();
+        FavoriteRecipe fav = new FavoriteRecipe();
+        fav.setRecipeId(recipeId);
+        fav.setUserProfile(userPRepo.findOneByUsername(username).get());
+        favRepo.save(fav);
 
+        UserProfile up = userPRepo.findOneByUsername(username).get();
 
+        response.setRecipeIds(favRepo.findAllByUserProfile(up));
+        return new ResponseEntity<>(response , HttpStatus.OK);
+    }
+
+    public ResponseEntity<String> deleteFavorite(String username, Long recipeId) {
+        
+        UserProfile up = userPRepo.findOneByUsername(username).get();
+
+        favRepo.deleteByUserProfileAndRecipeId(up, recipeId);
+        return new ResponseEntity<>("Deleted the recipe "+ recipeId +" correctly", HttpStatus.OK);
+        
+    }
 }

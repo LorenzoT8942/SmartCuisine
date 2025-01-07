@@ -58,20 +58,4 @@ public class RecipesIngredientsController {
         RecipeInfoResponseDTO recipe = recipeService.searchRecipeInfo(id);
         return ResponseEntity.ok(recipe);
     }
-    
-/* 
-    @GetMapping("recipes/nutritonal-info/{id}")
-    public ResponseEntity<NutritionalInfoDTO> searchRecipeNutritionalInfo(@PathVariable Long id) {
-        NutritionalInfoDTO recipe = recipeService.searchRecipeNutritionalInfo(id);
-        return ResponseEntity.ok(recipe);
-    }
-*/
-
-    @GetMapping("recipes/favorites/add/{id}/{username}")
-    public boolean addRecipeToFavorites(@PathVariable Long id, @PathVariable String username){
-
-        //TODO: implementare aggiunta entry nel db
-
-        return false;
-    }
 }
