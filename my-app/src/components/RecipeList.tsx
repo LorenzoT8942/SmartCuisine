@@ -10,7 +10,7 @@ const RecipeList = ({ recipes }) => {
           key={index}
           id = {recipe.id}
           title={recipe.title}
-          imageUrl={recipe.imageUrl}
+          imageUrl={recipe.image}
         />
       ))}
     </div>

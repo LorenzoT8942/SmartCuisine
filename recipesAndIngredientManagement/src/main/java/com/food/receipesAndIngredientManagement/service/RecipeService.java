@@ -18,10 +18,11 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 public class RecipeService {
 
-    private final String API_KEY = "1b99c9b44ecf4f5080e43718a1c6db89";
+    private final String API_KEY = "4e5cc22df52c475887ce454cec6659ca";
 
     @Autowired
     private RecipeRepository recipeRepository;

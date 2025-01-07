@@ -26,5 +26,4 @@ public class ShoppingList implements Serializable {
     private Map<Long, Float> ingredients = new HashMap<>();
 
     public void addIngredient(Long id, Float quantity) {this.ingredients.put(id, quantity);}
-
 }

@@ -1,12 +1,14 @@
 .search-bar {
   display: flex;
   justify-content: center;
+  width: 600px;
+  padding: 0 20px; /* Add padding to the container */
+  box-sizing: border-box; /* Ensure padding is included in the width calculation */
   margin: 20px 0;
 }
 
 .search-bar__input {
   width: 100%;
-  max-width: 400px;
   padding: 10px 15px;
   border: 1px solid #ccc;
   border-radius: 4px;

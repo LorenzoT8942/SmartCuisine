@@ -1,11 +1,11 @@
 .recipe-card {
-  width: 300px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
   background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  overflow: hidden;
+  margin: 10px;
+  width: 300px; /* Adjust the width as needed */
 }
 
 .recipe-card:hover {
@@ -15,8 +15,8 @@
 
 .recipe-card__image {
   width: 100%;
-  height: 30%;
-  
+  height: 200px; /* Adjust the height as needed */
+  object-fit: cover; /* Maintain aspect ratio and cover the container */
 }
 
 .recipe-card__content {

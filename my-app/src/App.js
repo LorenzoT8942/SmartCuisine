@@ -10,6 +10,7 @@ import SignUp from './components/SignUp.tsx';
 import SearchBar from './components/SearchBar.tsx'
 import SearchRecipeResults from './components/SearchRecipesResults.tsx'
 import RecipeInfoPage from './components/RecipeInfoPage/RecipeInfoPage.tsx'
+import ShoppingListPage from './components/ShoppingList/ShoppingListPage.tsx'
 
 function App() {
 
@@ -33,6 +34,9 @@ function App() {
             <Route path="/results" element={<SearchRecipeResults />} />
             {/* Route for RecipeInfoPage */}
             <Route path="/recipes/info/:recipeId" element={<RecipeInfoPage />} />
+            {/* Route for ShoppingList */}
+            <Route path="/shopping-list" element={<ShoppingListPage />} />
+            {/* Route for Storage */}
             {/* Route for UserProfileWithNotifications */}
             <Route path="/profile" element={<UserProfileComp />} />
             <Route path="/signup" element={<SignUp />} />
@@ -115,28 +119,31 @@ function HomePage() {
     
 
     return (
-        <div style={containerStyles}>
-            <SearchBar onSearch={handleSearch} />
-            <div style={{ marginTop: '20px' }}>
-                {loginButton}
-                {logoutButton}
-                {signUpButton}
-                {profileButton}
-            </div>
-        </div>
+    
+        // <div style={containerStyles}>
+        //     <SearchBar onSearch={handleSearch} />
+        //     <div style={{ marginTop: '20px' }}>
+        //         {loginButton}
+        //         {logoutButton}
+        //         {signUpButton}
+        //         {profileButton}
+        //     </div>
+        // </div>
+    <div className="app-container">
+      <h1 className="app-title">Smart Cuisine</h1>  
+      <SearchBar onSearch={handleSearch} />
+      <div className="button-container">
+        <button className="nav-button" onClick={() => navigate('/storage')}>Storage</button>
+        <button className="nav-button" onClick={() => navigate('/shopping-list')}>Shopping List</button>
+        <button className="nav-button" onClick={() => navigate('/profile')}>Profile</button>
+        {isLoggedIn ? (
+            <button className="logout-button" onClick={handleLogout}>Logout</button>
+          ) : (
+            <button className="nav-button" onClick={handleLogin}>Login</button>
+          )}
+      </div>
+    </div>
     );
 }
-
-/*
-function HomeShoppingList() {
-  return (
-      <div style={{padding: '10px', border: '1px solid #ccc', marginBottom: "40px", backgroundColor: "white", borderRadius: "20px"}}>
-          <h2>Shopping List</h2>
-          {generateIngredientCards(ingredients)}
-      </div>
-  );
-}
-*/
-
 export default App;
 

@@ -3,6 +3,7 @@ import RecipeList from "./RecipeList.tsx";
 import SearchBar from "./SearchBar.tsx";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import "../CSS/searchRecipesResults.css";
 
 const SearchRecipesResults = () => {
 
@@ -30,7 +31,7 @@ const SearchRecipesResults = () => {
 
       const data = response.data;
       setRecipes(data);
-      
+      console.log(recipes);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -38,15 +39,13 @@ const SearchRecipesResults = () => {
     }
   };
 
-
   useEffect(() => {
     console.log("profile of token "+ token);
     handleSearch(searchValue);
   }, []);
   
-
   return (
-    <div>
+    <div className="search-results-wrapper">
       <SearchBar onSearch={handleSearch} />
       <h1 id="results-message">Search Results for "{searchValue}"</h1>
       {recipes.length > 0 ? (
@@ -57,7 +56,5 @@ const SearchRecipesResults = () => {
     </div>
   );
 };
-
-
 
 export default SearchRecipesResults;
