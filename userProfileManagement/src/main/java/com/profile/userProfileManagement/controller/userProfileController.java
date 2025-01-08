@@ -33,7 +33,6 @@ public class userProfileController {
 
     @PostMapping("/create")
     public ResponseEntity<Object> createProfile(@RequestBody userProfileRequestDto userProfileRequestDto) {
-        System.out.println("me so rotto il cazzo :)\n\n");
         try {
             userProfileResponseDto createdProfile = userPServ.createUserProfile(userProfileRequestDto);
             return new ResponseEntity<>(createdProfile, HttpStatus.CREATED);
@@ -71,21 +70,21 @@ public class userProfileController {
         return userPServ.updateprofile(username, entity);
     }
 
-        @GetMapping("/profile/{username}/favorites")
-    public ResponseEntity<FavoriteRecipesResponseDTO> getFavorites(@PathVariable String username) {
-        username = JWTContext.get();
+    @GetMapping("/profile/favorites")
+    public ResponseEntity<FavoriteRecipesResponseDTO> getFavorites() {
+        String username = JWTContext.get();
         return userPServ.getFavorites(username);
     }
 
-    @PostMapping("/profile/{username}/favorites/{recipeId}")
-    public ResponseEntity<FavoriteRecipesResponseDTO> addFavorite(@PathVariable String username, @PathVariable Long recipeId) {
-        username = JWTContext.get();
+    @PostMapping("/profile/favorites/{recipeId}")
+    public ResponseEntity<FavoriteRecipesResponseDTO> addFavorite(@PathVariable Long recipeId) {
+        String username = JWTContext.get();
         return userPServ.addFavorite(username, recipeId);
     }
 
-    @DeleteMapping("/profile/{username}/favorites/{recipeId}")
-    public ResponseEntity<String> deleteFavorite(@PathVariable String username, @PathVariable Long recipeId) {
-        username = JWTContext.get();
+    @DeleteMapping("/profile/favorites/{recipeId}")
+    public ResponseEntity<String> deleteFavorite(@PathVariable Long recipeId) {
+        String username = JWTContext.get();
         return userPServ.deleteFavorite(username, recipeId);
     }
 }

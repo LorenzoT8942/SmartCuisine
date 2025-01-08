@@ -88,7 +88,7 @@ function HomePage() {
         window.location.reload();
       };
 
-    if (isLoggedIn) {
+    /*if (isLoggedIn) {
         logoutButton = (
             <button onClick={handleLogout} style={{ marginLeft: '10px' }}>
                 Logout
@@ -110,7 +110,7 @@ function HomePage() {
                 Signup
             </button>
         );
-    }
+    }*/
 
     const containerStyles = {
         margin: '0 auto',
@@ -133,18 +133,21 @@ function HomePage() {
         // </div>
     <div className="app-container">
       <h1 className="app-title">Smart Cuisine</h1>  
-      <SearchBar onSearch={handleSearch} />
-      <div className="button-container">
-        <button className="nav-button" onClick={() => navigate('/storage')}>Storage</button>
-        <button className="nav-button" onClick={() => navigate('/shopping-list')}>Shopping List</button>
-        <button className="nav-button" onClick={() => navigate('/profile')}>Profile</button>
+      <SearchBar onSearch={handleSearch} />       
         {isLoggedIn ? (
+            <div  className="button-container">
+            <button className="nav-button" onClick={() => navigate('/storage')}>Storage</button>
+            <button className="nav-button" onClick={() => navigate('/shopping-list')}>Shopping List</button>
+            <button className="nav-button" onClick={() => navigate('/profile')}>Profile</button>
             <button className="logout-button" onClick={handleLogout}>Logout</button>
+            </div>
           ) : (
+            <div  className="button-container">
             <button className="nav-button" onClick={handleLogin}>Login</button>
+            </div>
+
           )}
       </div>
-    </div>
     );
 }
 export default App;

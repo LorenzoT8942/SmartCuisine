@@ -1,11 +1,12 @@
 package com.profile.userProfileManagement.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -142,32 +143,33 @@ public class userProfileService {
 
     
     public ResponseEntity<FavoriteRecipesResponseDTO> getFavorites(String username) {
-        //TODO: check if queries return valid results
-        UserProfile up = userPRepo.findOneByUsername(username).get();
+        UserProfile up = userPRepo.findById(username).get();
         FavoriteRecipesResponseDTO response = new FavoriteRecipesResponseDTO();
-        response.setRecipeIds(favRepo.findAllByUserProfile(up));
+        List<Long> recipeIds = favRepo.findAllReceipesByUserProfile(up);
+        response.setRecipeIds(recipeIds);
         return new ResponseEntity<>(response , HttpStatus.OK);
     }
 
     public ResponseEntity<FavoriteRecipesResponseDTO> addFavorite(String username, Long recipeId) {
-        //TODO: check if queries return valid results
         FavoriteRecipesResponseDTO response = new FavoriteRecipesResponseDTO();
+        UserProfile up = userPRepo.findById(username).get();
+        List<Long> recipeIds = favRepo.findAllReceipesByUserProfile(up);
+        if(recipeIds.contains(recipeId)) return new ResponseEntity<>(null , HttpStatus.FORBIDDEN);
+
+
         FavoriteRecipe fav = new FavoriteRecipe();
         fav.setRecipeId(recipeId);
-        fav.setUserProfile(userPRepo.findOneByUsername(username).get());
+        fav.setUserProfile(up);
         favRepo.save(fav);
-
-        UserProfile up = userPRepo.findOneByUsername(username).get();
-
-        response.setRecipeIds(favRepo.findAllByUserProfile(up));
+        response.setRecipeIds(recipeIds);
         return new ResponseEntity<>(response , HttpStatus.OK);
     }
 
     public ResponseEntity<String> deleteFavorite(String username, Long recipeId) {
         
-        UserProfile up = userPRepo.findOneByUsername(username).get();
+        UserProfile up = userPRepo.findById(username).get();
 
-        favRepo.deleteByUserProfileAndRecipeId(up, recipeId);
+        favRepo.deleteByRecipeIdAndUsername(recipeId, up.getUsername());
         return new ResponseEntity<>("Deleted the recipe "+ recipeId +" correctly", HttpStatus.OK);
         
     }

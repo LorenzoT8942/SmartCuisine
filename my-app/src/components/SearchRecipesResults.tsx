@@ -49,8 +49,8 @@ const SearchRecipesResults = () => {
       <SearchBar onSearch={handleSearch} />
       <h1 id="results-message">Search Results for "{searchValue}"</h1>
       {recipes.length > 0 ? (
-        <RecipeList recipes={recipes} />
-      ) : (
+      <RecipeList recipes={recipes} setRecipes={setRecipes} />
+    ) : (
         <p>No recipes found. Try another search!</p>
       )}
     </div>

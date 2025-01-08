@@ -3,9 +3,18 @@ import axios from 'axios';
 import { UserProfile } from '../types/UserProfile.ts';
 import { Notification } from '../types/Notification.ts';
 import '../CSS/user-profile.css';
+import RecipeList from "./RecipeList.tsx";
 
 interface UserProfileProps {
   username: string;
+}
+interface FavoriteRecipesResponseDTO {
+  recipeIds: number[];
+}
+interface RecipeInfoResponseDTO {
+  id: number;
+  title: string;
+  image: string;
 }
 export enum Gender {
   Male = "Male",
@@ -17,7 +26,10 @@ const UserProfileComp: React.FC<UserProfileProps> = ({ username }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [editedFields, setEditedFields] = useState<Partial<UserProfile & { password: string }>>({});
+  const [recipeIds, setRecipeIds] = useState<number[]>([]);
+  const [recipes, setRecipes] = useState<RecipeInfoResponseDTO[]>([]);
 
+  
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -42,8 +54,66 @@ const UserProfileComp: React.FC<UserProfileProps> = ({ username }) => {
       }
     };
 
+    const fetchRecipeInfo = async (id: number, token: string) => {
+      try {
+        const response = await axios.get<RecipeInfoResponseDTO>(
+          `http://localhost:3004/recipes-ingredients/recipes/info/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Bearer token for authentication
+            },
+          }
+        );
+        const { id: recipeId, title, image } = response.data;
+        return { id: recipeId, title, image }; // Return only the id, title, and image
+      } catch (err) {
+        console.error(err);
+        setError(err instanceof Error ? err.message : "An unknown error occurred");
+        return null; // Return null in case of an error
+      }
+    };
+
+    const fetchFavorites = async () => {
+      try {
+        // Retrieve token
+        if(token == null) throw new Error("the token is null");
+        const parsedData = JSON.parse(token);
+        const tokenParsed = parsedData.token;
+  
+        // Perform GET request
+        const response = await axios.get<FavoriteRecipesResponseDTO>(
+          
+          "http://localhost:3001/profiles/profile/favorites",
+          {
+            headers: {
+              Authorization: `Bearer ${tokenParsed}`, // Bearer token for authentication
+            },
+          }
+        );
+  
+        // Update state with the retrieved recipe IDs
+        setRecipeIds(response.data.recipeIds);
+
+        const recipePromises = response.data.recipeIds.map((id) =>
+          fetchRecipeInfo(id, tokenParsed)
+        );
+        const recipesData = await Promise.all(recipePromises);
+  
+        // Filter out any null responses (in case of errors fetching some recipes)
+        setRecipes(recipesData.filter((recipe) => recipe !== null) as RecipeInfoResponseDTO[]);
+
+
+        
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An unknown error occurred");
+        console.error(err);
+      } 
+    };
+
 
     fetchUserProfile();
+    fetchFavorites();
+
 
     setIsLoading(false);
   }, [username]);
@@ -190,6 +260,15 @@ const UserProfileComp: React.FC<UserProfileProps> = ({ username }) => {
           ))
         )}
       </ul>
+
+      <div>
+        <h3>Favorite Recipes</h3>
+        {recipeIds.length === 0 ? (
+          <p>No favorite recipes found.</p>
+        ) : (
+          <RecipeList recipes={recipes} setRecipes={setRecipes} />
+        )}
+      </div>
 
       <div className="delete-button-container">
         <button className="delete-button" onClick={handleDelete}>
