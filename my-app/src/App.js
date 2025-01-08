@@ -120,8 +120,6 @@ function HomePage() {
         borderRadius: '8px',
     };
 
-    
-
     return (
     
         // <div style={containerStyles}>

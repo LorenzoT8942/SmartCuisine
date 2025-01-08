@@ -27,7 +27,7 @@ public class IngredientService {
     public List<IngredientDTO> searchByName(String name) {
         List<IngredientDTO> ingredients = new ArrayList<>();
         // Specify the API URL
-        String url = "https://api.spoonacular.com/ingredients/complexSearch?query=" + name.strip();
+        String url = "https://api.spoonacular.com/food/ingredients/search?query=" + name.strip() + "&apiKey=" + API_KEY;
 
         // Create an HttpClient
         try (HttpClient client = HttpClient.newHttpClient()) {
@@ -42,7 +42,7 @@ public class IngredientService {
             try {
                 // Send the request and get the response
                 HttpResponse<String> jsonResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
-
+                System.out.println(jsonResponse.body());
                 ObjectMapper objectMapper = new ObjectMapper();
 
                 // Parse JSON into IngredientResponseDTO
@@ -51,7 +51,7 @@ public class IngredientService {
                 // Access individual ingredients
                 ingredients = responseDTO.getResults();
                 ingredients.forEach(ingredient ->
-                        System.out.println(ingredient.getId() + ": " + ingredient.getName() + " (" + ingredient.getImage() + ")")
+                        System.out.println(ingredient.getId() + ": " + ingredient.getName() + " (" + ingredient.getImage() + ")") 
                 );
             } catch (Exception e) {
                 // Handle exceptions

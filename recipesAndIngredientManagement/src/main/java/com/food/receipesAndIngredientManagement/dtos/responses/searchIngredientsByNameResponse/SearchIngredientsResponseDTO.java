@@ -5,9 +5,11 @@ import lombok.Setter;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Getter
 @Setter
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchIngredientsResponseDTO {
 
     // Getters and Setters
