@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import '../../CSS/shopping-list-details.css';
 import { FaArrowLeft, FaPlusCircle, FaTrash } from 'react-icons/fa';
+import IngredientModal from './IngredientModal.tsx';
 
 interface Ingredient {
     id: number;
@@ -23,6 +24,7 @@ const ShoppingListDetails = () => {
     const [shoppingList, setShoppingList] = useState<ShoppingList | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const token = localStorage.getItem('authToken');
     const navigate = useNavigate();
 
@@ -52,9 +54,18 @@ const ShoppingListDetails = () => {
         fetchShoppingList();
     }, [listName, token]);
 
-    const handleAddIngredient = () => {
-        // Logica per aggiungere un ingrediente
-        console.log("Add Ingredient clicked");
+    const handleAddIngredientClick= () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleAddIngredientToList = (ingredient: Ingredient) => {
+        // Logica per aggiungere l'ingrediente alla lista
+        console.log("Ingredient added:", ingredient);
+        setIsModalOpen(false);
     };
 
     const handleDeleteList = async () => {
@@ -79,34 +90,37 @@ const ShoppingListDetails = () => {
 
     return (
         <div className="shopping-list-wrapper">
-        <div className="header">
+            <div className="header">
                 <button className="back-button" onClick={() => navigate(-1)}>
                     <FaArrowLeft /> Back
                 </button>
                 <div className="actions">
-                    <button className="action-button" onClick={handleAddIngredient}>
-                        <FaPlusCircle/> Add Ingredient 
+                    <button className="action-button" onClick={handleAddIngredientClick}>
+                        <FaPlusCircle className="icon" /> Add Ingredient
                     </button>
                     <button className="action-button" onClick={handleDeleteList}>
-                        <FaTrash />Delete List
+                        <FaTrash className="icon" /> Delete List
                     </button>
                 </div>
-        </div>
-        <h1 className="center-text">{listName}</h1>
-        <hr />
-        {shoppingList && shoppingList.ingredients && shoppingList.ingredients.length > 0 ? ( 
-            <div>
-            <ul>
-                {shoppingList?.ingredients.map((ingredient) => (
-                    <li key={ingredient.id}>
-                        {ingredient.name}: {ingredient.quantity} {ingredient.unit}
-                    </li>
-                ))}
-            </ul>
             </div>
-        ) : (
-            <h1 className="center-text">No ingredients in this shopping list</h1>
-        )}
+            <h1 className="center-text">{listName}</h1>
+            <hr />
+            {shoppingList && shoppingList.ingredients && shoppingList.ingredients.length > 0 ? ( 
+                <div>
+                    <ul>
+                        {shoppingList?.ingredients.map((ingredient) => (
+                            <li key={ingredient.id}>
+                                {ingredient.name}: {ingredient.quantity} {ingredient.unit}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ) : (
+                <h1 className="center-text">No ingredients in this shopping list</h1>
+            )}
+            {isModalOpen && (
+                <IngredientModal onClose={handleCloseModal} onAdd={handleAddIngredientToList} />
+            )}
         </div>
     );
 };

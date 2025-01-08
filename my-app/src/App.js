@@ -13,6 +13,7 @@ import RecipeInfoPage from './components/RecipeInfoPage/RecipeInfoPage.tsx'
 import ShoppingListPage from './components/ShoppingList/ShoppingListPage.tsx'
 import ShoppingListDetail from './components/ShoppingList/ShoppingListDetail.tsx';
 
+
 function App() {
 
     useEffect(() => {
@@ -39,6 +40,7 @@ function App() {
             <Route path="/shopping-list" element={<ShoppingListPage />} />
             <Route path="/shopping-list/:listName" element={<ShoppingListDetail />} />
             {/* Route for Storage */}
+            {/*<Route path="/storage" element={<StoragePage />} />*/}
             {/* Route for UserProfileWithNotifications */}
             <Route path="/profile" element={<UserProfileComp />} />
             <Route path="/signup" element={<SignUp />} />
