@@ -154,6 +154,7 @@ public class userProfileService {
         FavoriteRecipesResponseDTO response = new FavoriteRecipesResponseDTO();
         UserProfile up = userPRepo.findById(username).get();
         List<Long> recipeIds = favRepo.findAllReceipesByUserProfile(up);
+        System.out.println("trying to add ingredient");
         if(recipeIds.contains(recipeId)) return new ResponseEntity<>(null , HttpStatus.FORBIDDEN);
 
 

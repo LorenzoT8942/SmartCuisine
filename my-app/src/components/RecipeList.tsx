@@ -7,12 +7,12 @@ import axios from "axios";
 const RecipeList = ({ recipes, setRecipes  }) => {
 
   const token = localStorage.getItem('authToken');
-  if(token == null) throw new Error("the token is null");
-  const parsedData = JSON.parse(token);
-  const tokenParsed = parsedData.token;
 
   const location = useLocation(); // Get the current route path
   const handleDelete = async (id: number) => {
+    if(token == null) throw new Error("the token is null");
+    const parsedData = JSON.parse(token);
+    const tokenParsed = parsedData.token;
     try {
       const response = await axios.delete(`http://localhost:3001/profiles/profile/favorites/${id}`, {
         headers: {
@@ -28,8 +28,12 @@ const RecipeList = ({ recipes, setRecipes  }) => {
   };
   
   const handleAdd = async (id: number) => {
+    if(token == null) throw new Error("the token is null");
+    const parsedData = JSON.parse(token);
+    const tokenParsed = parsedData.token;
     try {
-      const response = await axios.post(`http://localhost:3001/profiles/profile/favorites/${id}`, {
+
+      const response = await axios.post(`http://localhost:3001/profiles/profile/favorites/${id}`,{}, {
         headers: {
           Authorization: `Bearer ${tokenParsed}`,
         },

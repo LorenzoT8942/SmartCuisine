@@ -43,6 +43,7 @@ public class JWTAuthenticationFilter implements Filter{
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+
          // Skip the filter for these paths
         if ("/profiles/create".equals(httpRequest.getRequestURI()) || "/profiles/login".equals(httpRequest.getRequestURI())) {
 

@@ -1,16 +1,6 @@
 package com.food.receipesAndIngredientManagement.service;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.food.receipesAndIngredientManagement.dtos.responses.SearchRecipeRequestDTO;
-import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipeInformationResponse.NutritionalInfoDTO;
-import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipeInformationResponse.RecipeInfoResponseDTO;
-import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipesByNameResponse.RecipeResultDTO;
-import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipesByNameResponse.SearchRecipeByNameResponseDTO;
-import com.food.receipesAndIngredientManagement.repository.RecipeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -18,11 +8,21 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipeInformationResponse.NutritionalInfoDTO;
+import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipeInformationResponse.RecipeInfoResponseDTO;
+import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipesByNameResponse.RecipeResultDTO;
+import com.food.receipesAndIngredientManagement.dtos.responses.searchRecipesByNameResponse.SearchRecipeByNameResponseDTO;
+import com.food.receipesAndIngredientManagement.repository.RecipeRepository;
+
 
 @Service
 public class RecipeService {
 
-    private final String API_KEY = "4e5cc22df52c475887ce454cec6659ca";
+    private final String API_KEY = "1b99c9b44ecf4f5080e43718a1c6db89";
 
     @Autowired
     private RecipeRepository recipeRepository;
