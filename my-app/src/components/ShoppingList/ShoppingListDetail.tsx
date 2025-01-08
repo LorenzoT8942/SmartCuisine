@@ -1,6 +1,9 @@
 import axios from 'axios';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import '../../CSS/shopping-list-details.css';
+import { FaArrowLeft, FaPlusCircle, FaTrash } from 'react-icons/fa';
 
 interface Ingredient {
     id: number;
@@ -16,25 +19,29 @@ interface ShoppingList {
 }
 
 const ShoppingListDetails = () => {
-    const { id } = useParams<{ id: string }>();
-    const [shoppingList, setShoppingList] = React.useState<ShoppingList | null>(null);
-    const [loading, setLoading] = React.useState(true);
-    const [error, setError] = React.useState<string | null>(null);
+    const { listName } = useParams();
+    const [shoppingList, setShoppingList] = useState<ShoppingList | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const token = localStorage.getItem('authToken');
+    const navigate = useNavigate();
 
-    React.useEffect(() => {
+    useEffect(() => {
         const fetchShoppingList = async () => {
             if (token == null) throw new Error("the token is null");
             const parsedData = JSON.parse(token);
             const tokenParsed = parsedData.token;
             try {
                 setLoading(true);
-                const response = await axios.get(`http://localhost:3002/shopping-lists/${id}`, {
+                const response = await axios.get(`http://localhost:3002/shopping-lists/${listName}`, {
                     headers: {
                         Authorization: `Bearer ${tokenParsed}`
                     }
                 });
                 setShoppingList(response.data);
+                console.log("shopping list fetched:")
+                console.log(response.data);
+                console.log(shoppingList)
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -43,14 +50,52 @@ const ShoppingListDetails = () => {
         };
 
         fetchShoppingList();
-    }, [id, token]);
+    }, [listName, token]);
+
+    const handleAddIngredient = () => {
+        // Logica per aggiungere un ingrediente
+        console.log("Add Ingredient clicked");
+    };
+
+    const handleDeleteList = async () => {
+        // Logica per eliminare la lista
+        if (token == null) throw new Error("the token is null");
+        const parsedData = JSON.parse(token);
+        const tokenParsed = parsedData.token;
+        try {
+            await axios.delete(`http://localhost:3002/shopping-lists/${listName}`, {
+                headers: {
+                    Authorization: `Bearer ${tokenParsed}`
+                }
+            });
+            navigate(-1); // Torna alla pagina precedente dopo l'eliminazione
+        } catch (err) {
+            setError(err.message);
+        }
+    };
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
-            <h1>{shoppingList?.name}</h1>
+        <div className="shopping-list-wrapper">
+        <div className="header">
+                <button className="back-button" onClick={() => navigate(-1)}>
+                    <FaArrowLeft /> Back
+                </button>
+                <div className="actions">
+                    <button className="action-button" onClick={handleAddIngredient}>
+                        <FaPlusCircle/> Add Ingredient 
+                    </button>
+                    <button className="action-button" onClick={handleDeleteList}>
+                        <FaTrash />Delete List
+                    </button>
+                </div>
+        </div>
+        <h1 className="center-text">{listName}</h1>
+        <hr />
+        {shoppingList && shoppingList.ingredients && shoppingList.ingredients.length > 0 ? ( 
+            <div>
             <ul>
                 {shoppingList?.ingredients.map((ingredient) => (
                     <li key={ingredient.id}>
@@ -58,6 +103,10 @@ const ShoppingListDetails = () => {
                     </li>
                 ))}
             </ul>
+            </div>
+        ) : (
+            <h1 className="center-text">No ingredients in this shopping list</h1>
+        )}
         </div>
     );
 };

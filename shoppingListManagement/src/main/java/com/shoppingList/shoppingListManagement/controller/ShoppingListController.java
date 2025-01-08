@@ -46,6 +46,7 @@ public class ShoppingListController {
     @GetMapping("/{name}")
     public ShoppingListResponseDTO getShoppingListById(@PathVariable String name) {
         String username = JWTContext.get();
+        System.out.println("list name: " + name +"\n");
         return shoppingListService.getShoppingListById(username, name);
     }
 
