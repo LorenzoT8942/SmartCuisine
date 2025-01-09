@@ -124,6 +124,14 @@ services:
       postgresql:
         condition: service_healthy
 
+#  react-app:
+ #   build:
+  #    context: .
+   #   dockerfile: Dockerfile
+    #ports:
+     # - "3006:3006"
+    #restart: always
+
 volumes:
   rabbitmq_data:
     driver: local

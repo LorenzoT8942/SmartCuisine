@@ -85,6 +85,22 @@ const ShoppingListDetails = () => {
         }
     };
 
+    const handleMoveIngredientsToStorage = async () => {
+        if (token == null) throw new Error("the token is null");
+        const parsedData = JSON.parse(token);
+        const tokenParsed = parsedData.token;
+        try {
+            await axios.post(`http://localhost:3005/api/storage/move-ingredients/${listName}`,{}, {
+                headers: {
+                    Authorization: `Bearer ${tokenParsed}`
+                }
+            });
+        } catch (err) {
+            console.log(err);
+            setError(err.message);
+        }
+    }
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
@@ -103,6 +119,9 @@ const ShoppingListDetails = () => {
                     </button>
                 </div>
             </div>
+            <button className="move-button" onClick={handleMoveIngredientsToStorage}>
+                Move to Storage
+            </button>
             <h1 className="center-text">{listName}</h1>
             <hr />
             {shoppingList && shoppingList.ingredients && shoppingList.ingredients.length > 0 ? ( 

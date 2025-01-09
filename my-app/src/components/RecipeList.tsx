@@ -27,23 +27,7 @@ const RecipeList = ({ recipes, setRecipes  }) => {
     }
   };
   
-  const handleAdd = async (id: number) => {
-    if(token == null) throw new Error("the token is null");
-    const parsedData = JSON.parse(token);
-    const tokenParsed = parsedData.token;
-    try {
-
-      const response = await axios.post(`http://localhost:3001/profiles/profile/favorites/${id}`,{}, {
-        headers: {
-          Authorization: `Bearer ${tokenParsed}`,
-        },
-      });
-      console.log("Recipe added", response);
-
-    } catch (error) {
-      console.error("Error adding recipe", error);
-    }
-  };
+  
 
   return (
     <div className="recipe-list">
@@ -62,14 +46,7 @@ const RecipeList = ({ recipes, setRecipes  }) => {
               Remove
             </button>
           )}
-          {location.pathname !== "/profile" && (
-            <button
-              onClick={() => handleAdd(recipe.id)}
-              className="create-button"
-            >
-              Add to favourites
-            </button>
-          )}
+          
         </div>
       ))}
     </div>
