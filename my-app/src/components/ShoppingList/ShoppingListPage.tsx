@@ -8,7 +8,6 @@ import ShoppingListCard from "./ShoppingListCard.tsx";
 const ShoppingListPage = () => {
 
   interface ShoppingList {
-      //finire di definire l'interfaccia
       username: String;
       name: String;
   }
