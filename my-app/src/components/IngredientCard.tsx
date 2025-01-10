@@ -1,40 +1,27 @@
-import React from "react";
+import React from 'react';
+import { FaTrash } from 'react-icons/fa';
+import '../CSS/ingredient-card.css';
 
-const IngredientCard = ({ name, quantity, expirationDate }) => {
-    const cardStyles = {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '10px 20px',
-        border: '1px solid #ccc',
-        borderRadius: '8px',
-        backgroundColor: '#f9f9f9',
-        marginBottom: '10px', // Spacing for multiple cards
-        width: '20%',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-    };
+interface IngredientCardProps {
+    name: string;
+    quantity: number;
+    expirationDate: string | null;
+    onDelete: () => void;
+}
 
-    const nameStyles = {
-        fontWeight: 'bold',
-        fontSize: '16px',
-        color: '#333',
-    };
-
-    const quantityStyles = {
-        fontSize: '16px',
-        color: '#666',
-    };
-
-    const expirationDateStyles = {
-        fontSize: '16px',
-        color: '#999',
-    };
-
+const IngredientCard: React.FC<IngredientCardProps> = ({ name, quantity, expirationDate }) => {
     return (
-        <div style={cardStyles}>
-            <span style={nameStyles}>{name}</span>
-            <span style={quantityStyles}>{quantity}</span>
-            {expirationDate && <span style={expirationDateStyles}>{expirationDate}</span>}
+        <div className="ingredient-card">
+            <div className="ingredient-info">
+                <div className="ingredient-details">
+                    <h3>{name}</h3>
+                    <p>Quantity: {quantity} grams</p>
+                    {expirationDate && <p>Expiration Date: {expirationDate}</p>}
+                </div>
+                <button className="remove-button">
+                    <FaTrash />
+                </button>
+            </div>
         </div>
     );
 };
