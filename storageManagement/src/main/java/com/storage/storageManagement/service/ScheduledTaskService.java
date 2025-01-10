@@ -40,7 +40,7 @@ public class ScheduledTaskService {
     /**
      * Method that will be executed every 1 minute.
      */
-    @Scheduled(fixedRate = 60000)  // 60000 ms = 1 minute
+    @Scheduled(fixedRate = 600000)  // 60000 ms = 1 minute
     public void checkExpiredProductsAndNotify() {
         logger.info("Starting scheduled task to check for expired products.");
 

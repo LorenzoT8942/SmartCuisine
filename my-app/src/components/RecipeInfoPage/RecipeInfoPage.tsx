@@ -126,6 +126,7 @@ const RecipeDetailsPage = () => {
         },
       });
       console.log("Recipe added", response);
+      setIsFavorite(true);
 
     } catch (error) {
       console.error("Error adding recipe", error);

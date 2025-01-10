@@ -33,11 +33,9 @@ public class StorageListController {
      * @param username The username of the user
      * @return StorageListResponseDTO containing user's storage details
      */
-    @GetMapping("/{username}")
-    public List<StorageListResponseDTO> getStorageByUsername(@PathVariable String username) {
-        if (!JWTContext.get().equals(username)) {
-            throw new RuntimeException("User is not authorized to access this resource");
-        }
+    @GetMapping()
+    public List<StorageListResponseDTO> getStorageByUsername() {
+        String username = JWTContext.get();
         return storageListService.getStorageByUsername(username);
     }
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-const IngredientCard = ({ name, quantity }) => {
+const IngredientCard = ({ name, quantity, expirationDate }) => {
     const cardStyles = {
         display: 'flex',
         justifyContent: 'space-between',
@@ -25,10 +25,16 @@ const IngredientCard = ({ name, quantity }) => {
         color: '#666',
     };
 
+    const expirationDateStyles = {
+        fontSize: '16px',
+        color: '#999',
+    };
+
     return (
         <div style={cardStyles}>
             <span style={nameStyles}>{name}</span>
             <span style={quantityStyles}>{quantity}</span>
+            {expirationDate && <span style={expirationDateStyles}>{expirationDate}</span>}
         </div>
     );
 };
