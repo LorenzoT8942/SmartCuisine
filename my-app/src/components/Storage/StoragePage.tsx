@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaTrash, FaPlus } from "react-icons/fa";
 import axios from "axios";
 import "../../CSS/storage-page.css"; //Import del file CSS
 import IngredientCard from "../IngredientCard.tsx";
+import IngredientModal from "../ShoppingList/IngredientModal.tsx";
+import { FaArrowLeft, FaPlusCircle, FaTrash } from 'react-icons/fa';
 
 
 interface Ingredient {
@@ -30,6 +31,8 @@ const StoragePage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const token = localStorage.getItem('authToken');
     const navigate = useNavigate();
+    const prevIngredientsRef = useRef<Ingredient[]>([]);
+
 
 
     const fetchStorage = async () => {
@@ -73,7 +76,7 @@ const StoragePage = () => {
         const parsedData = JSON.parse(token);
         const tokenParsed = parsedData.token;
         try {
-            const response = await axios.get(`http://localhost:3004/recipes-ingredients/ingredients/${ingredientId}`, {
+            const response = await axios.get(`http://localhost:3004/recipes-ingredients/ingredients/search-by-id/${ingredientId}`, {
                 headers: {
                     Authorization: `Bearer ${tokenParsed}`
                 }
@@ -121,9 +124,57 @@ const StoragePage = () => {
     useEffect(() => {
         fetchStorage();
         console.log("ingredients", ingredients);
-        }, [token]);
+    }, [token]);
+
+    useEffect(() => {
+        const prevIngredients = prevIngredientsRef.current;
+
+        if (ingredients.length > 0 && !error && JSON.stringify(prevIngredients) !== JSON.stringify(ingredients)) {
+            fetchAllIngredients();
+        }
+        prevIngredientsRef.current = ingredients;
+
+    }, [ingredients, error]);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
 
+
+    return (
+        <div className="shopping-list-wrapper">
+            <div className="header">
+                <button className="back-button" onClick={() => navigate(-1)}>
+                    <FaArrowLeft /> Back
+                </button>
+                <div className="actions">
+                    <button className="action-button" onClick={handleAddIngredientClick}>
+                        <FaPlusCircle className="icon" /> Add Ingredient
+                    </button>
+                </div>
+            </div>
+            
+            <h1 className="center-text">Storage</h1>
+            <hr />
+            { ingredients.length!==0 ? ( 
+                <div>
+                    <ul>
+                        {ingredients.map((ingredient, index) => (
+                            <li key={index}>
+                                {ingredient.name}: {ingredient.quantity} : {ingredient.expirationDate}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ) : (
+                <h1 className="center-text">No ingredients in this storage</h1>
+            )}
+            {isModalOpen && (
+                <IngredientModal onClose={handleCloseModal} onAdd={handleAddIngredientToList} listName={"Storage"} />
+            )}
+            
+        </div>
+    );
 
 
 

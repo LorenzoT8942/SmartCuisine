@@ -12,6 +12,7 @@ import SearchRecipeResults from './components/SearchRecipesResults.tsx'
 import RecipeInfoPage from './components/RecipeInfoPage/RecipeInfoPage.tsx'
 import ShoppingListPage from './components/ShoppingList/ShoppingListPage.tsx'
 import ShoppingListDetail from './components/ShoppingList/ShoppingListDetail.tsx';
+import StoragePage from './components/Storage/StoragePage.tsx';
 
 
 function App() {
@@ -40,7 +41,7 @@ function App() {
             <Route path="/shopping-list" element={<ShoppingListPage />} />
             <Route path="/shopping-list/:listName" element={<ShoppingListDetail />} />
             {/* Route for Storage */}
-            {/*<Route path="/storage" element={<StoragePage />} />*/}
+            {<Route path="/storage" element={<StoragePage />} />}
             {/* Route for UserProfileWithNotifications */}
             <Route path="/profile" element={<UserProfileComp />} />
             <Route path="/signup" element={<SignUp />} />
