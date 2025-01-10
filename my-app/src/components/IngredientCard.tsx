@@ -3,13 +3,14 @@ import { FaTrash } from 'react-icons/fa';
 import '../CSS/ingredient-card.css';
 
 interface IngredientCardProps {
+    id: number;
     name: string;
     quantity: number;
     expirationDate: string | null;
-    onDelete: () => void;
+    onDelete: (ingredientId: number) => void;
 }
 
-const IngredientCard: React.FC<IngredientCardProps> = ({ name, quantity, expirationDate }) => {
+const IngredientCard: React.FC<IngredientCardProps> = ({ id, name, quantity, expirationDate, onDelete }) => {
     return (
         <div className="ingredient-card">
             <div className="ingredient-info">
@@ -18,7 +19,7 @@ const IngredientCard: React.FC<IngredientCardProps> = ({ name, quantity, expirat
                     <p>Quantity: {quantity} grams</p>
                     {expirationDate && <p>Expiration Date: {expirationDate}</p>}
                 </div>
-                <button className="remove-button">
+                <button className="remove-button" onClick={() => onDelete(id)}>
                     <FaTrash />
                 </button>
             </div>

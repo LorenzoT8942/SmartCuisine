@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import '../../CSS/shopping-list-details.css';
 import { FaArrowLeft, FaPlusCircle, FaTrash } from 'react-icons/fa';
 import IngredientModal from './IngredientModal.tsx';
+import IngredientCard from '../IngredientCard.tsx';
 
 interface Ingredient {
     id: number;
@@ -55,16 +56,6 @@ const ShoppingListDetails = () => {
                 }
             }).then((response) => {
                 setShoppingList(response.data);
-            console.log("shopping list fetched. Response:")
-            console.log(response.data);
-            console.log("actual shopping list:");
-            console.log(shoppingList);
-            console.log("actual shopping list ingredients:");
-            if (shoppingList && shoppingList.ingredients) {
-                Object.entries(shoppingList.ingredients).forEach(([key, value]) => {
-                });
-            }
-            //console.log("length: ", Object.entries(shoppingList.ingredients).length);
             });
             
         } catch (err) {
@@ -89,6 +80,8 @@ const ShoppingListDetails = () => {
                     return null;
                 })
             );
+            console.log("pazzesco");
+            console.log(ingredientDetails);
             setIngredients(ingredientDetails.filter((ingredient) => ingredient !== null) as Ingredient[]);
         }
     };
@@ -98,7 +91,7 @@ const ShoppingListDetails = () => {
         const parsedData = JSON.parse(token);
         const tokenParsed = parsedData.token;
         try {
-            const response = await axios.get(`http://localhost:3004/recipes-ingredients/ingredients/${ingredientId}`, {
+            const response = await axios.get(`http://localhost:3004/recipes-ingredients/ingredients/search-by-id/${ingredientId}`, {
                 headers: {
                     Authorization: `Bearer ${tokenParsed}`
                 }
@@ -156,19 +149,37 @@ const ShoppingListDetails = () => {
         }
     }
 
+    const handleDeleteIngredient = async (ingredientId: number) => {
+        if (token == null) throw new Error("the token is null");
+        const parsedData = JSON.parse(token);
+        const tokenParsed = parsedData.token;
+        try {
+            await axios.delete(`http://localhost:3002/shopping-lists/${listName}/delete-ingredient/${ingredientId}`, {
+                headers: {
+                    Authorization: `Bearer ${tokenParsed}`
+                }
+            }).then(() => {    
+                    fetchShoppingList();
+            });
+            
+        } catch (err) {
+            setError(err.message);
+        }
+    }
+
     useEffect(() => {
         fetchShoppingList();
         console.log("ingredients", ingredients);
 
     }, [listName, token]);
 
-    useEffect(() => {   
-        console.log("mi aggiorno come un pazzo");   
-    }   , [shoppingList?.ingredients]);
-
     useEffect(() => {
         console.log("ingredients", ingredients);
     }, [ingredients]);
+
+    useEffect(() => {
+        fetchAllIngredients();
+    }, [shoppingList, token]);
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -193,17 +204,14 @@ const ShoppingListDetails = () => {
             </div>
             
             <h1 className="center-text">{listName}</h1>
+
             <hr />
-            { shoppingList && shoppingList.ingredients && !isListEmpty() ? ( 
-                <div>
-                    <ul>
-                        {Object.entries(shoppingList.ingredients).map((ingredient, index) => (
-                            <li key={index}>
-                                {ingredient[0]}: {ingredient[1]} 
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+            { ingredients.length > 0? (
+                <div className="ingredients-list">
+                {ingredients.map((ingredient) => (
+                    <IngredientCard key={ingredient.id} id={ingredient.id} name={ingredient.name as string} quantity={ingredient.quantity} expirationDate={null} onDelete={handleDeleteIngredient} />
+                ))}
+            </div>
             ) : (
                 <h1 className="center-text">No ingredients in this shopping list</h1>
             )}

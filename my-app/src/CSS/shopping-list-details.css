@@ -85,3 +85,10 @@
 .icon {
     margin-right: 8px; /* Aggiungi spazio tra l'icona e il testo */
 }
+
+.ingredients-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
