@@ -75,6 +75,7 @@ public class ShoppingListController {
 
     @PostMapping("/add-ingredient")
     public AddIngredientResponseDTO addIngredientToShoppingList(@RequestBody AddIngredientRequestDTO addIngredientRequestDTO) {
+        System.out.println("\n\n\n\n\n\n\naddIngredientRequestDTO: " + addIngredientRequestDTO + "\n");
         return shoppingListService.addIngredientToShoppingList(addIngredientRequestDTO);
     }
 

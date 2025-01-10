@@ -88,7 +88,7 @@ public class ShoppingListService {
     public AddIngredientResponseDTO addIngredientToShoppingList(AddIngredientRequestDTO addIngredientRequestDTO) {
         // Find the shopping list to which save the ingredient
         ShoppingListID shoppingListId = new ShoppingListID(
-                addIngredientRequestDTO.getUsername(),
+                JWTContext.get(),
                 addIngredientRequestDTO.getShoppingListName()
         );
 

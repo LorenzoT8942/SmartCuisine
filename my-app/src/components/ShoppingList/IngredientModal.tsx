@@ -2,30 +2,42 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../../CSS/ingredient-modal.css';
 
+interface IngredientDTO {
+    ingredientId: number;
+    quantity: number;
+}
+
 interface Ingredient {
     id: number;
     name: string;
     quantity: number;
-    unit: string;
 }
 
-interface SelectedIngredient {
-    id: number;
-    ingredient: Ingredient;
-    quantity: number;
-}
+// interface SelectedIngredient {
+//     id: number;
+//     ingredient: IngredientDTO;
+//     quantity: number;
+// }
 
 interface IngredientModalProps {
     onClose: () => void;
-    onAdd: (ingredient: SelectedIngredient) => void;
+    onAdd: () => void;
+    listName: string | undefined;
 }
 
-const IngredientModal: React.FC<IngredientModalProps> = ({ onClose, onAdd }) => {
+interface AddIngredientRequestDTO {
+    username: string;
+    shoppingListName: string;
+    ingredients: IngredientDTO[];
+}
+
+const IngredientModal: React.FC<IngredientModalProps> = ({ onClose, onAdd, listName }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResults, setSearchResults] = useState<Ingredient[]>([]);
-    const [selectedIngredients, setSelectedIngredients] = useState<SelectedIngredient[]>([]);
+    const [selectedIngredients, setSelectedIngredients] = useState<Ingredient[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [shoppingListName, setShoppingListName] = useState<string | undefined>(listName);
     const token = localStorage.getItem('authToken');
 
     const handleSearch = async () => {
@@ -57,18 +69,14 @@ const IngredientModal: React.FC<IngredientModalProps> = ({ onClose, onAdd }) => 
     };
 
     const handleAddIngredient = (ingredient: Ingredient) => {
-        if (selectedIngredients.some(selected => selected.ingredient.id === ingredient.id)) {
+        if (selectedIngredients.some(selected => selected.id === ingredient.id)) {
             alert('This ingredient has already been added.');
             return;
         }
         const quantity = prompt(`Enter quantity in grams for ${ingredient.name}:`);
         if (quantity && !isNaN(Number(quantity))) {
-            const selectedIngredient: SelectedIngredient = {
-                id: ingredient.id,
-                ingredient,
-                quantity: parseFloat(quantity)
-            };
-            setSelectedIngredients([...selectedIngredients, selectedIngredient]);
+            ingredient.quantity = Number(quantity);
+            setSelectedIngredients([...selectedIngredients, ingredient]);
         } else {
             alert('Please enter a valid number for the quantity.');
         }
@@ -77,6 +85,35 @@ const IngredientModal: React.FC<IngredientModalProps> = ({ onClose, onAdd }) => 
     const handleRemoveIngredient = (index: number) => {
         const updatedIngredients = selectedIngredients.filter((_, i) => i !== index);
         setSelectedIngredients(updatedIngredients);
+    };
+
+    const handleConfirm = async () => {
+        if (token == null) throw new Error("the token is null");
+        const parsedData = JSON.parse(token);
+        const tokenParsed = parsedData.token;
+        if (listName === undefined) throw new Error("listName is undefined");
+        const addIngredientRequest: AddIngredientRequestDTO = {
+            username: "username",
+            shoppingListName: listName, // Replace with actual shopping list name
+            ingredients: selectedIngredients.map(selected => ({
+                ingredientId: selected.id,
+                quantity: selected.quantity
+            }))
+        };
+        try {
+            await axios.post('http://localhost:3002/shopping-lists/add-ingredient', addIngredientRequest, {
+                headers: {
+                    Authorization: `Bearer ${tokenParsed}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            alert('Ingredients added successfully');
+            onAdd()
+            onClose();
+        } catch (err) {
+            alert('Error adding ingredients');
+            console.error(err);
+        }
     };
 
     return (
@@ -108,18 +145,20 @@ const IngredientModal: React.FC<IngredientModalProps> = ({ onClose, onAdd }) => 
                             <p>No ingredients found</p>
                         )}
                     </ul>
+                    <div className="vertical-line"></div>
                     <div className="selected-ingredients">
                         <h3>Selected Ingredients</h3>
                         <ul>
                             {selectedIngredients.map((selected, index) => (
                                 <li key={index}>
-                                    {selected.ingredient.name}: {selected.quantity} grams
+                                    {selected.name}: {selected.quantity} grams
                                     <button className="remove-button" onClick={() => handleRemoveIngredient(index)}>X</button>
                                 </li>
                             ))}
                         </ul>
                     </div>
                 </div>
+                <button className="confirm-button" onClick={handleConfirm}>Confirm</button>
                 <button className="cancel-button" onClick={onClose}>Cancel</button>
             </div>
         </div>

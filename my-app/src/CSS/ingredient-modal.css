@@ -69,6 +69,9 @@ button:hover {
     width: 45%;
     list-style: none;
     padding: 0;
+    min-height: 400px;
+    max-height: 400px; /* Imposta un'altezza massima per la lista */
+    overflow-y: auto; /* Rendi la lista scrollabile */
 }
 
 .search-results li {
@@ -79,6 +82,12 @@ button:hover {
 
 .search-results li:hover {
     background-color: #f0f0f0;
+}
+
+.vertical-line {
+    width: 1px;
+    background-color: #ccc;
+    margin: 0 10px;
 }
 
 .selected-ingredients {
@@ -92,6 +101,9 @@ button:hover {
 .selected-ingredients ul {
     list-style: none;
     padding: 0;
+    min-height: 400px;
+    max-height: 400px; /* Imposta un'altezza massima per la lista */
+    overflow-y: auto; /* Rendi la lista scrollabile */
 }
 
 .selected-ingredients li {
@@ -114,8 +126,17 @@ button:hover {
     color: #c82333;
 }
 
-.cancel-button {
+.confirm-button {
     margin-top: 20px;
+    background-color: #28a745;
+}
+
+.confirm-button:hover {
+    background-color: #218838;
+}
+
+.cancel-button {
+    margin-top: 10px;
     background-color: #dc3545;
 }
 
