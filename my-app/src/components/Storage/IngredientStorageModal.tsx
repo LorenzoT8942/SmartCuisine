@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../../CSS/ingredient-modal.css';
+
 
 interface Ingredient {
   id: number;
@@ -44,55 +46,62 @@ const AddIngredientModal: React.FC<AddIngredientModalProps> = ({ onClose, onSubm
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
-        <h2>Add Ingredient</h2>
-        <form onSubmit={(e) => e.preventDefault()}>
-          <div className="form-group">
-            <label>
-              Quantity:
-              <input
-                type="number"
-                value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value) || '')}
-                placeholder="Enter quantity"
-                className={formErrors.quantity ? 'input-error' : ''}
-              />
-            </label>
-            {formErrors.quantity && <span className="error-message">{formErrors.quantity}</span>}
-          </div>
-          <div className="form-group">
-            <label>
-              Expiration Date:
-              <input
-                type="date"
-                value={expirationDate}
-                onChange={(e) => setExpirationDate(e.target.value)}
-                className={formErrors.expirationDate ? 'input-error' : ''}
-              />
-            </label>
-            {formErrors.expirationDate && (
-              <span className="error-message">{formErrors.expirationDate}</span>
-            )}
-          </div>
-          <div className="modal-actions">
-            <button type="button" onClick={handleSubmit}>
-              Add
+        <div className="modal-content">
+            <button className="close-button" onClick={onClose}>
+                X
             </button>
-            <button type="button" onClick={onClose}>
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
+            <h2>Add Ingredient</h2>
+            <form onSubmit={(e) => e.preventDefault()}>
+                <div className="form-group">
+                    <label>
+                        Quantity:
+                        <input
+                            type="number"
+                            value={quantity}
+                            onChange={(e) => setQuantity(Number(e.target.value) || '')}
+                            placeholder="Enter quantity"
+                            className={`input-field ${formErrors.quantity ? 'input-error' : ''}`}
+                        />
+                    </label>
+                    {formErrors.quantity && (
+                        <span className="error-message">{formErrors.quantity}</span>
+                    )}
+                </div>
+                <div className="form-group">
+                    <label>
+                        Expiration Date:
+                        <input
+                            type="date"
+                            value={expirationDate}
+                            onChange={(e) => setExpirationDate(e.target.value)}
+                            className={`input-field ${formErrors.expirationDate ? 'input-error' : ''}`}
+                        />
+                    </label>
+                    {formErrors.expirationDate && (
+                        <span className="error-message">{formErrors.expirationDate}</span>
+                    )}
+                </div>
+                <div className="modal-actions">
+                    <button className="confirm-button" type="button" onClick={handleSubmit}>
+                        Add
+                    </button>
+                    <button className="cancel-button" type="button" onClick={onClose}>
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-  );
+);
+
 };
 
 interface IngredientShoppingModalProps {
   onClose: () => void;
+  onAdd: () => void;
 }
 
-const IngredientShoppingModal: React.FC<IngredientShoppingModalProps> = ({ onClose }) => {
+const IngredientShoppingModal: React.FC<IngredientShoppingModalProps> = ({ onClose, onAdd}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -173,6 +182,7 @@ const IngredientShoppingModal: React.FC<IngredientShoppingModalProps> = ({ onClo
           )
         )
       );
+      onAdd();
       onClose();
     } catch (error) {
       console.error('Error confirming ingredients:', error);
@@ -197,25 +207,41 @@ const IngredientShoppingModal: React.FC<IngredientShoppingModalProps> = ({ onClo
           />
         </form>
         {loading && <p>Loading...</p>}
-        <ul>
-          {ingredients.map((ingredient) => (
-            <li key={ingredient.ingredientId}>
-              {ingredient.name}
-              <button onClick={() => handleAddIngredientClick(ingredient)}>Add</button>
-            </li>
-          ))}
+        <div className="ingredient-selection">
+        <ul className="search-results">
+          
+        {ingredients.length > 0 ? (
+                            ingredients.map((ingredient) => (
+                                <li key={ingredient.id} onClick={() => handleAddIngredientClick(ingredient)}>
+                                    {ingredient.name}
+                                </li>
+                            ))
+                        ) : (
+                            <p>No ingredients found</p>
+                        )}
+          
         </ul>
-        <h2>Selected Ingredients</h2>
-        <ul>
-          {selectedIngredients.map((ingredient, index) => (
-            <li key={ingredient.ingredientId}>
-              {ingredient.name} - {ingredient.quantity} -{' '}
-              {ingredient.expirationDate.toISOString().split('T')[0]}
-              <button onClick={() => handleRemoveIngredient(index)}>Remove</button>
+          <div className="vertical-line"></div>
+          <div className="selected-ingredients">
+          <h3>Selected Ingredients</h3>
+            <ul>
+            {selectedIngredients.map((selected, index) => (
+            <li key={selected.id}>
+              {selected.name}: 
+              <br />
+              {selected.quantity} grams
+              <br />
+              {selected.expirationDate.toISOString().split('T')[0]}
+              <br />
+              <button className="remove-button" onClick={() => handleRemoveIngredient(index)}>X</button>
             </li>
-          ))}
-        </ul>
-        <button onClick={handleConfirm}>Confirm</button>
+            ))}
+          </ul>
+        </div>
+        </div>
+        <button className="confirm-button" onClick={handleConfirm}>Confirm</button>
+        <button className="cancel-button" onClick={onClose}>Cancel</button>
+
         {isAddModalOpen && (
           <AddIngredientModal onClose={() => setAddModalOpen(false)} onSubmit={handleAddIngredient} />
         )}

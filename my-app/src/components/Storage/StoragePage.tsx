@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../CSS/storage-page.css"; //Import del file CSS
 import IngredientCard from "../IngredientCard.tsx";
-import IngredientModal from "./IngredientShoppingModal.tsx"
+import IngredientModal from "./IngredientStorageModal.tsx"
 import { FaArrowLeft, FaPlusCircle, FaTrash } from 'react-icons/fa';
 
 
@@ -81,6 +81,7 @@ const StoragePage = () => {
                     Authorization: `Bearer ${tokenParsed}`
                 }
             });
+            console.log(response.data);
             return response.data;
         } catch (err) {
             setError('Error fetching ingredient details');
@@ -108,6 +109,23 @@ const StoragePage = () => {
         }
     };
 
+    const handleDeleteIngredient = async (ingredientId: number) => {
+        if (token == null) throw new Error("the token is null");
+        const parsedData = JSON.parse(token);
+        const tokenParsed = parsedData.token;
+        try {
+            const response = await axios.delete(`http://localhost:3005/api/storage/deleteIngredient/${ingredientId}`, {
+                headers: {
+                    Authorization: `Bearer ${tokenParsed}`
+                }
+            });
+            console.log("Ingredient deleted", response);
+            setIngredients((prevIngredients) => prevIngredients.filter((ingredient) => ingredient.ingredientId !== ingredientId));
+        } catch (error) {
+            console.error("Error deleting ingredient", error);
+        }
+    };
+
     const handleAddIngredientClick= () => {
         setIsModalOpen(true);
     };
@@ -117,9 +135,15 @@ const StoragePage = () => {
     };
 
     const handleAddIngredientToList = () => {
-        fetchStorage();
+        const prevIngredients = prevIngredientsRef.current;
+
+        if (ingredients.length > 0 && !error && JSON.stringify(prevIngredients) !== JSON.stringify(ingredients)) {
+            fetchAllIngredients();
+        }
+        prevIngredientsRef.current = ingredients;
         setIsModalOpen(false);
     };
+
 
     useEffect(() => {
         fetchStorage();
@@ -161,7 +185,7 @@ const StoragePage = () => {
                     <ul>
                         {ingredients.map((ingredient, index) => (
                             <li key={index}>
-                                {ingredient.name}: {ingredient.quantity} : {ingredient.expirationDate}
+                                <IngredientCard key={ingredient.ingredientId} id={ingredient.ingredientId} name={ingredient.name as string} quantity={ingredient.quantity} expirationDate={ingredient.expirationDate} onDelete={handleDeleteIngredient} />
                             </li>
                         ))}
                     </ul>
@@ -170,7 +194,7 @@ const StoragePage = () => {
                 <h1 className="center-text">No ingredients in this storage</h1>
             )}
             {isModalOpen && (
-                <IngredientModal onClose={handleCloseModal}/>
+                <IngredientModal onClose={handleCloseModal} onAdd={handleAddIngredientToList}/>
             )}
             
         </div>

@@ -22,7 +22,7 @@ import com.food.receipesAndIngredientManagement.repository.RecipeRepository;
 @Service
 public class RecipeService {
 
-    private final String API_KEY = "4e5cc22df52c475887ce454cec6659ca";
+    private final String API_KEY = "412c0f7530c245a482a24e1937325987";
 
     @Autowired
     private RecipeRepository recipeRepository;
