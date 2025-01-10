@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../../CSS/storage-page.css"; //Import del file CSS
 import IngredientCard from "../IngredientCard.tsx";
-import IngredientModal from "../ShoppingList/IngredientModal.tsx";
+import IngredientModal from "./IngredientShoppingModal.tsx"
 import { FaArrowLeft, FaPlusCircle, FaTrash } from 'react-icons/fa';
 
 
@@ -170,7 +170,7 @@ const StoragePage = () => {
                 <h1 className="center-text">No ingredients in this storage</h1>
             )}
             {isModalOpen && (
-                <IngredientModal onClose={handleCloseModal} onAdd={handleAddIngredientToList} listName={"Storage"} />
+                <IngredientModal onClose={handleCloseModal}/>
             )}
             
         </div>

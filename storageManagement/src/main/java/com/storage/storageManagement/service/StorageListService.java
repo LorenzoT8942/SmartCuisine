@@ -75,6 +75,8 @@ public class StorageListService {
      */
     public StorageListResponseDTO addIngredientToStorage(AddIngredientRequestDTO request) {
         // Validazione del formato della data di scadenza
+        String username = JWTContext.get();
+        request.setUsername(username);
         LocalDate expiryDate;
         try {
             expiryDate = request.getExpirationDate();
