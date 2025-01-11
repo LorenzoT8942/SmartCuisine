@@ -1,26 +1,20 @@
-FROM node:18 AS build
+# Use the Node.js image
+FROM node:18
 
+# Set the working directory
 WORKDIR /app
 
+# Copy package.json and package-lock.json to the container
 COPY package*.json ./
 
-# Installa le dipendenze
+# Install dependencies
 RUN npm install
 
-# Copia il resto dei file del progetto
+# Copy the rest of the application source code to the container
 COPY . .
 
-# builda l'app per la produzione
-RUN npm run build
+# Expose the React development server port
+EXPOSE 3000
 
-# Usa un'immagine Nginx come web server
-FROM nginx:1.25-alpine
-
-# Copia i file buildati nella directory di Nginx
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Espone la porta 3006
-EXPOSE 3006
-
-# Avvia il server Nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start the React development server
+CMD ["npm", "start"]
