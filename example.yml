@@ -1,0 +1,66 @@
+version: '3'
+services:
+  postgresql:
+    container_name: postgres
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_USER: smart_cuisine
+      POSTGRES_PASSWORD: forzaMagggicaRoma1
+    volumes:
+      - ./postgresql/data:/var/lib/postgresql/data
+      - ./postgresql/postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./postgresql/init-database.sql:/docker-entrypoint-initdb.d/init-database.sql
+    ports:
+      - "5432:5432"
+    command: -c 'config_file=/etc/postgresql/postgresql.conf'
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "smart_cuisine", "-d", "notification_db", "-h", "localhost"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 5s
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672" 
+    volumes:
+      - ./rabbitmq/rabbitmq_data:/var/lib/rabbitmq
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq/definitions.json:/etc/rabbitmq/definitions.json
+    networks:
+      - rabbit-network
+
+  xxx-management:
+    container_name: xxx-management
+    image: xxx-management
+    build:
+        context: ./authenticationManagement
+    ports:
+      - "ext_xxx_port:3000"
+    networks:
+      - app-network
+
+  react-app:
+    build:
+      context: ./my-app
+      dockerfile: Dockerfile
+    ports:
+      - "3006:3000"
+    restart: always
+
+volumes:
+  rabbitmq_data:
+    driver: local
+  
+networks:
+  rabbit-network:
+    driver: bridge
+
+  app-network:
+    driver: bridge
