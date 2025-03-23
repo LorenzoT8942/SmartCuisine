@@ -197,7 +197,13 @@ const ShoppingListDetails = () => {
                     <button className="action-button" onClick={handleDeleteList}>
                         <FaTrash className="icon" /> Delete List
                     </button>
-                    <button className="action-button" onClick={handleMoveIngredientsToStorage}>
+                    <button
+                        className="action-button"
+                        onClick={() => {
+                            handleMoveIngredientsToStorage();
+                            alert("Moved to storage correctly");
+                        }}
+                    >
                         Move to Storage
                     </button>
                 </div>

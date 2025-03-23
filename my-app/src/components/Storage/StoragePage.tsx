@@ -181,14 +181,12 @@ const StoragePage = () => {
             <h1 className="center-text">Storage</h1>
             <hr />
             { ingredients.length!==0 ? ( 
-                <div>
-                    <ul>
+                <div  className="shopping-lists-container">
                         {ingredients.map((ingredient, index) => (
                             <li key={index}>
                                 <IngredientCard key={ingredient.ingredientId} id={ingredient.ingredientId} name={ingredient.name as string} quantity={ingredient.quantity} expirationDate={ingredient.expirationDate} onDelete={handleDeleteIngredient} />
                             </li>
                         ))}
-                    </ul>
                 </div>
             ) : (
                 <h1 className="center-text">No ingredients in this storage</h1>

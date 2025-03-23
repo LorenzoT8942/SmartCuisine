@@ -134,9 +134,10 @@ function HomePage() {
         // </div>
     <div className="app-container">
       <h1 className="app-title">Smart Cuisine</h1>  
-      <SearchBar onSearch={handleSearch} />       
+            
         {isLoggedIn ? (
             <div  className="button-container">
+            <SearchBar onSearch={handleSearch} /> 
             <button className="nav-button" onClick={() => navigate('/storage')}>Storage</button>
             <button className="nav-button" onClick={() => navigate('/shopping-list')}>Shopping List</button>
             <button className="nav-button" onClick={() => navigate('/profile')}>Profile</button>
